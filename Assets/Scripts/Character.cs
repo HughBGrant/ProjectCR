@@ -21,6 +21,8 @@ public class Character : MonoBehaviour
         Vector2 moveVector2 = rawMoveVector2 * speed * Time.deltaTime;
         Vector3 moveVector = new Vector3(moveVector2.x, 0, moveVector2.y);
         rb.MovePosition(rb.position + moveVector);
+        Quaternion targetRotation = Quaternion.LookRotation(moveVector);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10f * Time.deltaTime);
 
     }
     public void OnAnimationStart()
