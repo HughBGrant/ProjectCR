@@ -1,151 +1,175 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float _walkSpeed;
-    [SerializeField] private float _sprintSpeed;
-    [SerializeField] private float _currentSpeed;
-    [SerializeField] private float _jumpPower;
-    [SerializeField] private Vector2 _moveInput;
-    [SerializeField] private Vector3 _moveDirection;
+    [SerializeField]
+    private float walkSpeed;
+    [SerializeField]
+    private float sprintSpeed;
+    [SerializeField] 
+    private float jumpPower;
+    [SerializeField]
+    private float fallGravityMultiplier;
 
-    private bool _isWalking;
-    private bool _isSprinting;
-    private bool _isJumping;
-    private bool _shouldJump;
-    private bool _isAttacking;
-    private bool _isAttackHeld;
+    [Header("Dodge / Swap")]
+    [SerializeField]
+    private float dodgeDuration;
+    [SerializeField]
+    private float dodgeSpeedMultiplier;
+    [SerializeField]
+    private float swapDuration;
 
-    private float _speedMultiplier = 1f;
+    [Header("Ground Check")]
+    [SerializeField]
+    private Transform groundCheckPoint;
+    [SerializeField]
+    private float groundCheckDistance;
+    [SerializeField]
+    private LayerMask groundLayer;
 
-    private Animator _animator;
-    private Rigidbody _rb;
-    private Weapon _currentWeapon;
+    private Vector2 moveInput;
+    private Vector3 moveDirection;
 
-    private Coroutine _attackCo;
+    private bool isSprinting;
+    [SerializeField] private bool isJumping;
+    private bool shouldJump;
+    private bool isAttacking;
+    private bool isAttackHeld;
 
-    private static readonly int _isWalkingHash = Animator.StringToHash("isWalking");
-    private static readonly int _isSprintingHash = Animator.StringToHash("isSprinting");
-    private static readonly int _isJumpingHash = Animator.StringToHash("isJumping");
-    private static readonly int _doJumpHash = Animator.StringToHash("doJump");
-    private static readonly int _doDodgeHash = Animator.StringToHash("doDodge");
-    private static readonly int _doSwapHash = Animator.StringToHash("doSwap");
-    private static readonly int _doShotHash = Animator.StringToHash("doShot");
-    private static readonly int _doSwingHash = Animator.StringToHash("doSwing");
-    private static readonly WaitForFixedUpdate _waitForFixedUpdate = new WaitForFixedUpdate();
+    private float nextAttackTime;
+
+    private Animator animator;
+    private Rigidbody rb;
+
+    private Coroutine attackCo;
+
+    private const float MoveEpsilon = 0.0001f;
+
+    private static readonly int IsWalkingHash = Animator.StringToHash("isWalking");
+    private static readonly int IsSprintingHash = Animator.StringToHash("isSprinting");
+    private static readonly int IsJumpingHash = Animator.StringToHash("isJumping");
+    private static readonly int DoJumpHash = Animator.StringToHash("doJump");
+    private static readonly int DoAttackHash = Animator.StringToHash("doAttack");
+
 
     void Awake()
     {
-        _animator = GetComponent<Animator>();
-        _rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void FixedUpdate()
     {
-        if (_shouldJump)
-        {
-            _rb.velocity = new Vector3(_rb.velocity.x, _jumpPower, _rb.velocity.z);
-            _shouldJump = false;
-        }
-        _moveDirection = new Vector3(_moveInput.x, 0f, _moveInput.y);
-
-        if (_isAttacking)
-        {
-            _moveDirection = Vector3.zero;
-        }
-        _currentSpeed = (_isWalking ? _walkSpeed : _sprintSpeed) * _speedMultiplier;
-        Vector3 moveVector = new Vector3(_moveDirection.x, 0f, _moveDirection.z) * _currentSpeed;
-        _rb.velocity = new Vector3(moveVector.x, _rb.velocity.y, moveVector.z);
-
-        if (_moveDirection.sqrMagnitude > 0.0001f)
-        {
-            transform.LookAt(transform.position + _moveDirection);
-        }
-        _isWalking = _moveDirection.sqrMagnitude > 0.0001f;
-
-        _animator.SetBool(_isWalkingHash, _isWalking);
-        _animator.SetBool(_isSprintingHash, _isSprinting);
+        HandleMovement();
+        HandleJumpFall();
     }
-    private void OnCollisionEnter(Collision collision)
+    private void HandleMovement()
     {
-        if (collision.gameObject.CompareTag(Tags.Ground))
+        if (shouldJump)
         {
-            _isJumping = false;
-            _animator.SetBool(_isJumpingHash, _isJumping);
+            rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
+            shouldJump = false;
+        }
+        moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
+
+        if (isAttacking)
+        {
+            moveDirection = Vector3.zero;
+        }
+        float speed = (isSprinting ? sprintSpeed : walkSpeed);
+        Vector3 moveVector = new Vector3(moveDirection.x, 0f, moveDirection.z) * speed;
+        rb.velocity = new Vector3(moveVector.x, rb.velocity.y, moveVector.z);
+
+        bool isWalking = moveDirection.sqrMagnitude > MoveEpsilon;
+        if (isWalking)
+        {
+            transform.forward = moveDirection;
+        }
+        animator.SetBool(IsWalkingHash, isWalking);
+        animator.SetBool(IsSprintingHash, isSprinting);
+
+    }
+    private void HandleJumpFall()
+    {
+        bool wasJumping = isJumping;
+
+        if (rb.velocity.y < 0f)
+        {
+            Debug.Log(rb.velocity.y);
+            //rb.velocity += Vector3.up * Physics.gravity.y * (fallGravityMultiplier - 1f) * Time.fixedDeltaTime;
+
+            if (IsGrounded())
+            {
+                isJumping = false;
+            }
+        }
+        if (wasJumping != isJumping)
+        {
+            animator.SetBool(IsJumpingHash, isJumping);
         }
     }
-
-    //void OnCollisionExit(Collision collision)
-    //{
-    //    if (collision.gameObject.CompareTag("Ground"))
-    //        isGrounded = false;
-    //}
-
     public void OnWalk(InputAction.CallbackContext context)
     {
-        _moveInput = context.ReadValue<Vector2>();
+        moveInput = context.ReadValue<Vector2>();
     }
     public void OnSprint(InputAction.CallbackContext context)
     {
-        _isSprinting = context.ReadValueAsButton();
+        isSprinting = context.ReadValueAsButton();
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed && !_isJumping)
-        {
-            _rb.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
-            _isJumping = true;
-            _animator.SetTrigger(_doJumpHash);
-            _animator.SetBool(_isJumpingHash, true);
-        }
+        if (!context.started || isJumping) { return; }
+
+        shouldJump = true;
+        isJumping = true;
+        animator.SetTrigger(DoJumpHash);
+        animator.SetBool(IsJumpingHash, isJumping);
+        
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-            _isAttackHeld = true;
+            isAttackHeld = true;
 
-            // 이미 루틴이 돌고 있지 않으면 시작
-            if (_attackCo == null)
+            if (attackCo == null)
             {
-                _attackCo = StartCoroutine(AttackRoutine());
+                attackCo = StartCoroutine(AttackRoutine());
             }
         }
         else if (context.canceled)
         {
-            _isAttackHeld = false;
-
-            // 즉시 정지
-            if (_attackCo != null)
-            {
-                StopCoroutine(_attackCo);
-                EndAttack();
-            }
+            isAttackHeld = false;
         }
     }
     private IEnumerator AttackRoutine()
     {
-        _isAttacking = true;
-
-        while (_isAttackHeld)
+        isAttacking = true;
+        while (isAttackHeld)
         {
-            //_currentWeapon.Use();
-            //_animator.SetTrigger(_currentWeapon.WeaponType == WeaponType.Melee ? _doSwingHash : _doShotHash);
-
-            //yield return new WaitForSeconds(_currentWeapon.AttackSpeed);
-            //continue;
-            
+            if (Time.time > nextAttackTime)
+            {
+                animator.SetTrigger(DoAttackHash);
+                nextAttackTime = Time.time + 0.4f;
+            }
             yield return null;
         }
-        EndAttack();
+        isAttacking = false;
+        attackCo = null;
     }
-    private void EndAttack()
+    private bool IsGrounded()
     {
-        _isAttacking = false;
-        _attackCo = null;
-
+        if (groundCheckPoint == null)
+        {
+            return false;
+        }
+        // 하강 중일 때만 바닥 감지
+        if (rb.velocity.y > 0f)
+        {
+            return false;
+        }
+        return Physics.Raycast(groundCheckPoint.position, Vector3.down, groundCheckDistance, groundLayer);
     }
 }
