@@ -8,10 +8,6 @@ public class Player : MonoBehaviour
     private float walkSpeed;
     [SerializeField]
     private float sprintSpeed;
-    [SerializeField] 
-    private float jumpPower;
-    [SerializeField]
-    private float fallGravityMultiplier;
 
     [Header("Dodge / Swap")]
     [SerializeField]
@@ -21,20 +17,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float swapDuration;
 
-    [Header("Ground Check")]
-    [SerializeField]
-    private Transform groundCheckPoint;
-    [SerializeField]
-    private float groundCheckDistance;
-    [SerializeField]
-    private LayerMask groundLayer;
-
     private Vector2 moveInput;
     private Vector3 moveDirection;
 
     private bool isSprinting;
-    [SerializeField] private bool isJumping;
-    private bool shouldJump;
     private bool isAttacking;
     private bool isAttackHeld;
 
@@ -49,29 +35,22 @@ public class Player : MonoBehaviour
 
     private static readonly int IsWalkingHash = Animator.StringToHash("isWalking");
     private static readonly int IsSprintingHash = Animator.StringToHash("isSprinting");
-    private static readonly int IsJumpingHash = Animator.StringToHash("isJumping");
-    private static readonly int DoJumpHash = Animator.StringToHash("doJump");
     private static readonly int DoAttackHash = Animator.StringToHash("doAttack");
-
+    private static readonly int DoSkill1Hash = Animator.StringToHash("doSkill1");
+    private static readonly int DoSkill2Hash = Animator.StringToHash("doSkill2");
+    private static readonly int DoSkill3Hash = Animator.StringToHash("doSkill3");
 
     void Awake()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
     }
-
     void FixedUpdate()
     {
         HandleMovement();
-        HandleJumpFall();
     }
     private void HandleMovement()
     {
-        if (shouldJump)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
-            shouldJump = false;
-        }
         moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
 
         if (isAttacking)
@@ -89,26 +68,6 @@ public class Player : MonoBehaviour
         }
         animator.SetBool(IsWalkingHash, isWalking);
         animator.SetBool(IsSprintingHash, isSprinting);
-
-    }
-    private void HandleJumpFall()
-    {
-        bool wasJumping = isJumping;
-
-        if (rb.velocity.y < 0f)
-        {
-            Debug.Log(rb.velocity.y);
-            //rb.velocity += Vector3.up * Physics.gravity.y * (fallGravityMultiplier - 1f) * Time.fixedDeltaTime;
-
-            if (IsGrounded())
-            {
-                isJumping = false;
-            }
-        }
-        if (wasJumping != isJumping)
-        {
-            animator.SetBool(IsJumpingHash, isJumping);
-        }
     }
     public void OnWalk(InputAction.CallbackContext context)
     {
@@ -117,16 +76,6 @@ public class Player : MonoBehaviour
     public void OnSprint(InputAction.CallbackContext context)
     {
         isSprinting = context.ReadValueAsButton();
-    }
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (!context.started || isJumping) { return; }
-
-        shouldJump = true;
-        isJumping = true;
-        animator.SetTrigger(DoJumpHash);
-        animator.SetBool(IsJumpingHash, isJumping);
-        
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
@@ -144,6 +93,23 @@ public class Player : MonoBehaviour
             isAttackHeld = false;
         }
     }
+    public void OnDefend(InputAction.CallbackContext context)
+    { }
+    public void OnSkill1(InputAction.CallbackContext context)
+    {
+        if (!context.started) { return; }
+        animator.SetTrigger(DoSkill1Hash);
+    }
+    public void OnSkill2(InputAction.CallbackContext context)
+    {
+        if (!context.started) { return; }
+        animator.SetTrigger(DoSkill2Hash);
+    }
+    public void OnSkill3(InputAction.CallbackContext context)
+    {
+        if (!context.started) { return; }
+        animator.SetTrigger(DoSkill3Hash);
+    }
     private IEnumerator AttackRoutine()
     {
         isAttacking = true;
@@ -158,18 +124,5 @@ public class Player : MonoBehaviour
         }
         isAttacking = false;
         attackCo = null;
-    }
-    private bool IsGrounded()
-    {
-        if (groundCheckPoint == null)
-        {
-            return false;
-        }
-        // 하강 중일 때만 바닥 감지
-        if (rb.velocity.y > 0f)
-        {
-            return false;
-        }
-        return Physics.Raycast(groundCheckPoint.position, Vector3.down, groundCheckDistance, groundLayer);
     }
 }

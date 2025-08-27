@@ -34,15 +34,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "d1748285-35a6-4d42-bd0e-169f3596ce61",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Sprint",
                     "type": "Button",
                     "id": "88241103-4f95-4b16-b33f-a4e5c4634ee0",
@@ -55,6 +46,33 @@
                     "name": "Defend",
                     "type": "Button",
                     "id": "bd5b149d-374b-4eb9-a537-ba50aea42b9a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill1",
+                    "type": "Button",
+                    "id": "ba47ed80-8138-48c8-8c26-bec68c861fb3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill2",
+                    "type": "Button",
+                    "id": "15aec365-e356-4e57-b243-abf070d3a703",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill3",
+                    "type": "Button",
+                    "id": "a864cf0c-d1ae-4f46-a4b0-4af9cd4c2242",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -284,17 +302,6 @@
                 },
                 {
                     "name": "",
-                    "id": "2650d187-3bfd-4c89-9228-f5478d5b93f0",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "129e2628-5464-44e3-a130-45de9b745158",
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
@@ -323,6 +330,39 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Defend",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "362c7d0d-82b9-4f0a-ae9e-a679b8d86849",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Skill1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "10de5a13-7f8b-462e-acd6-f9eb34bb1809",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Skill2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "467ea917-e620-497d-a0a9-a103294f8295",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Skill3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
