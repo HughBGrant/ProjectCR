@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
     private static readonly int IsWalkingHash = Animator.StringToHash("isWalking");
     private static readonly int IsSprintingHash = Animator.StringToHash("isSprinting");
     private static readonly int DoAttackHash = Animator.StringToHash("doAttack");
+    private static readonly int DoDefendHash = Animator.StringToHash("doDefend");
+
     private static readonly int DoSkill1Hash = Animator.StringToHash("doSkill1");
     private static readonly int DoSkill2Hash = Animator.StringToHash("doSkill2");
     private static readonly int DoSkill3Hash = Animator.StringToHash("doSkill3");
@@ -94,11 +96,15 @@ public class Player : MonoBehaviour
         }
     }
     public void OnDefend(InputAction.CallbackContext context)
-    { }
+    {
+        if (!context.started) { return; }
+        animator.SetTrigger(DoDefendHash);
+    }
     public void OnSkill1(InputAction.CallbackContext context)
     {
         if (!context.started) { return; }
         animator.SetTrigger(DoSkill1Hash);
+
     }
     public void OnSkill2(InputAction.CallbackContext context)
     {
