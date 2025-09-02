@@ -81,19 +81,19 @@ public class Player : MonoBehaviour
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            isAttackHeld = true;
+        //if (context.performed)
+        //{
+        //    isAttackHeld = true;
 
-            if (attackCo == null)
-            {
-                attackCo = StartCoroutine(AttackRoutine());
-            }
-        }
-        else if (context.canceled)
-        {
-            isAttackHeld = false;
-        }
+        //    if (attackCo == null)
+        //    {
+        //        attackCo = StartCoroutine(AttackRoutine());
+        //    }
+        //}
+        //else if (context.canceled)
+        //{
+        //    isAttackHeld = false;
+        //}
     }
     public void OnDefend(InputAction.CallbackContext context)
     {
