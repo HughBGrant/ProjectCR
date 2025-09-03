@@ -11,6 +11,7 @@ public class SkillControl : MonoBehaviour
     private TextMeshProUGUI[] cooldownTexts;
     [SerializeField]
     private float[] maxCooldownTimes;
+    private Player player;
 
     private float[] currentCooldownTimes = new float[3];
     void Awake()
