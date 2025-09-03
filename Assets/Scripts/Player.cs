@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
 
     private Coroutine attackCo;
 
+    public SkillControl skillUI;
+
     private const float MoveEpsilon = 0.0001f;
 
     private static readonly int IsWalkingHash = Animator.StringToHash("isWalking");
@@ -104,17 +106,20 @@ public class Player : MonoBehaviour
     {
         if (!context.started) { return; }
         animator.SetTrigger(DoSkill1Hash);
+        skillUI.OnUseSkill(0);
 
     }
     public void OnSkill2(InputAction.CallbackContext context)
     {
         if (!context.started) { return; }
         animator.SetTrigger(DoSkill2Hash);
+        skillUI.OnUseSkill(1);
     }
     public void OnSkill3(InputAction.CallbackContext context)
     {
         if (!context.started) { return; }
         animator.SetTrigger(DoSkill3Hash);
+        skillUI.OnUseSkill(2);
     }
     private IEnumerator AttackRoutine()
     {

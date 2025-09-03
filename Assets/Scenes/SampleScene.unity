@@ -817,6 +817,7 @@ MonoBehaviour:
   dodgeDuration: 0
   dodgeSpeedMultiplier: 0
   swapDuration: 0
+  skillUI: {fileID: 2087910931}
 --- !u!4 &824746516 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1812072891626710266, guid: 257c304c754d3b247a51ef5bea7a90d0, type: 3}
@@ -1113,11 +1114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ebbd10344d79614987b4c15075dd308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCooldownTime: 0
-  currentCooldownTime: 0
-  isCooldown: 0
-  textCooldownTime: {fileID: 0}
-  imageCooldownTime: {fileID: 0}
 --- !u!1 &1247633061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1475,6 +1471,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829702392}
   m_CullTransparentMesh: 1
+--- !u!114 &2087910931 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4875687601868292307, guid: 71d86fbdfc748314287dbaa188fb40fc, type: 3}
+  m_PrefabInstance: {fileID: 295452181}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a005f1f05fd544eb7b9b6e2a9a4033, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
