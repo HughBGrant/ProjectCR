@@ -52,27 +52,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Skill1",
+                    "name": "Skill",
                     "type": "Button",
                     "id": "ba47ed80-8138-48c8-8c26-bec68c861fb3",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Skill2",
-                    "type": "Button",
-                    "id": "15aec365-e356-4e57-b243-abf070d3a703",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Skill3",
-                    "type": "Button",
-                    "id": "a864cf0c-d1ae-4f46-a4b0-4af9cd4c2242",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -340,7 +322,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Skill1",
+                    "action": "Skill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -351,7 +333,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Skill2",
+                    "action": "Skill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -362,7 +344,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Skill3",
+                    "action": "Skill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

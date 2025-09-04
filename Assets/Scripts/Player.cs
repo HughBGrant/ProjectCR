@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
 
     private Coroutine attackCo;
 
-    public SkillControl skillUI;
+    public SkillUI skillUI;
 
     private const float MoveEpsilon = 0.0001f;
 
@@ -102,24 +102,12 @@ public class Player : MonoBehaviour
         if (!context.started) { return; }
         animator.SetTrigger(DoDefendHash);
     }
-    public void OnSkill1(InputAction.CallbackContext context)
+    public void OnSkill(InputAction.CallbackContext context)
     {
         if (!context.started) { return; }
         animator.SetTrigger(DoSkill1Hash);
-        skillUI.OnUseSkill(0);
-
-    }
-    public void OnSkill2(InputAction.CallbackContext context)
-    {
-        if (!context.started) { return; }
-        animator.SetTrigger(DoSkill2Hash);
-        skillUI.OnUseSkill(1);
-    }
-    public void OnSkill3(InputAction.CallbackContext context)
-    {
-        if (!context.started) { return; }
-        animator.SetTrigger(DoSkill3Hash);
-        skillUI.OnUseSkill(2);
+        string key = context.control.name;
+        //skillUI.OnUseSkill(key);
     }
     private IEnumerator AttackRoutine()
     {
