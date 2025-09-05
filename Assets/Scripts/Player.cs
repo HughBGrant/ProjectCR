@@ -26,12 +26,11 @@ public class Player : MonoBehaviour
 
     private float nextAttackTime;
 
-    private Animator animator;
+    public Animator animator;
     private Rigidbody rb;
 
     private Coroutine attackCo;
 
-    public SkillUI skillUI;
 
     private const float MoveEpsilon = 0.0001f;
 
