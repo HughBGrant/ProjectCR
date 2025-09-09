@@ -39,9 +39,6 @@ public class Player : MonoBehaviour
     private static readonly int DoAttackHash = Animator.StringToHash("doAttack");
     private static readonly int DoDefendHash = Animator.StringToHash("doDefend");
 
-    private static readonly int DoSkill1Hash = Animator.StringToHash("doSkill1");
-    private static readonly int DoSkill2Hash = Animator.StringToHash("doSkill2");
-    private static readonly int DoSkill3Hash = Animator.StringToHash("doSkill3");
 
     void Awake()
     {
@@ -82,31 +79,24 @@ public class Player : MonoBehaviour
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
-        //if (context.performed)
-        //{
-        //    isAttackHeld = true;
+        if (context.performed)
+        {
+            isAttackHeld = true;
 
-        //    if (attackCo == null)
-        //    {
-        //        attackCo = StartCoroutine(AttackRoutine());
-        //    }
-        //}
-        //else if (context.canceled)
-        //{
-        //    isAttackHeld = false;
-        //}
+            if (attackCo == null)
+            {
+                attackCo = StartCoroutine(AttackRoutine());
+            }
+        }
+        else if (context.canceled)
+        {
+            isAttackHeld = false;
+        }
     }
     public void OnDefend(InputAction.CallbackContext context)
     {
         if (!context.started) { return; }
         animator.SetTrigger(DoDefendHash);
-    }
-    public void OnSkill(InputAction.CallbackContext context)
-    {
-        if (!context.started) { return; }
-        animator.SetTrigger(DoSkill1Hash);
-        string key = context.control.name;
-        //skillUI.OnUseSkill(key);
     }
     private IEnumerator AttackRoutine()
     {
