@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
 
     private Coroutine attackCo;
 
+    [SerializeField]
+    private SkillManager skillManager;
 
     private const float MoveEpsilon = 0.0001f;
 
@@ -91,6 +93,14 @@ public class Player : MonoBehaviour
         {
             isAttackHeld = false;
         }
+    }
+    public void OnSkill(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) { return; }
+
+        string key = ctx.control.name;
+
+        skillManager.UseSkill(key);
     }
     public void OnDefend(InputAction.CallbackContext context)
     {
