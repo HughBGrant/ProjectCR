@@ -5,65 +5,61 @@ using UnityEngine.InputSystem;
 
 public class SkillManager : MonoBehaviour
 {
-    public void UseSkill(string key)
+    [Serializable]
+    public class Slot
     {
+        public string key = "1";
 
+        public SkillCaster caster;
+
+        public bool enabled = true;
     }
-    //    [Serializable]
-    //    public class Slot
-    //    {
-    //        public string key = "1";
+    [SerializeField]
+    private List<Slot> slots = new List<Slot>();
 
-    //        public SkillCaster caster;
+    private Dictionary<string, int> keyToIndex;
 
-    //        public bool enabled = true;
-    //    }
-    //    [SerializeField]
-    //    private List<Slot> slots = new List<Slot>();
+    private void Awake()
+    {
+        keyToIndex = new Dictionary<string, int>();
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (slots[i] == null || slots[i].caster == null) { continue; }
 
-    //    private Dictionary<string, int> keyToIndex;
+            string k = (slots[i].key ?? "").Trim().ToLowerInvariant();
 
-    //    private void Awake()
-    //    {
-    //        keyToIndex = new Dictionary<string, int>();
-    //        for (int i = 0; i < slots.Count; i++)
-    //        {
-    //            if (slots[i] == null || slots[i].caster == null) { continue; }
+            if (string.IsNullOrEmpty(k)) { continue; }
 
-    //            string k = (slots[i].key ?? "").Trim().ToLowerInvariant();
+            keyToIndex[k] = i;
+        }
+    }
+    public void OnSkill(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) { return; }
 
-    //            if (string.IsNullOrEmpty(k)) { continue; }
+        string k = (ctx.control?.name ?? "").ToLowerInvariant();
+        if (string.IsNullOrEmpty(k)) { return; }
 
-    //            keyToIndex[k] = i;
-    //        }
-    //    }
-    //    public void OnSkill(InputAction.CallbackContext ctx)
-    //    {
-    //        if (!ctx.performed) { return; }
+        if (keyToIndex.TryGetValue(k, out int idx))
+        {
+            TryCastSlot(idx);
+        }
+        else
+        {
+        }
+    }
+    private void TryCastSlot(int index)
+    {
+        if (index < 0 || index >= slots.Count) { return; }
 
-    //        string k = (ctx.control?.name ?? "").ToLowerInvariant();
-    //        if (string.IsNullOrEmpty(k)) { return; }
+        Slot slot = slots[index];
 
-    //        if (keyToIndex.TryGetValue(k, out int idx))
-    //        {
-    //            TryCastSlot(idx);
-    //        }
-    //        else
-    //        {
-    //        }
-    //    }
-    //    private void TryCastSlot(int index)
-    //    {
-    //        if (index < 0 || index >= slots.Count) { return; }
+        if (slot == null || !slot.enabled || slot.caster == null) { return; }
 
-    //        Slot slot = slots[index];
-
-    //        if (slot == null || !slot.enabled || slot.caster == null) { return; }
-
-    //        slot.caster.TryCast();
-    //    }
-    //    //public void OnClickSlot(int index)
-    //    //{
-    //    //    TryCastSlot(index);
-    //    //}
+        slot.caster.TryCast();
+    }
+    //public void OnClickSlot(int index)
+    //{
+    //    TryCastSlot(index);
+    //}
 }
