@@ -597,8 +597,8 @@ MonoBehaviour:
     m_ActionName: Player/Defend[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SkillCaster, Assembly-CSharp
+      - m_Target: {fileID: 1095783154}
+        m_TargetAssemblyTypeName: SkillManager, Assembly-CSharp
         m_MethodName: OnSkill
         m_Mode: 0
         m_Arguments:
@@ -844,7 +844,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 9
-  hotkeyLabel: 3
+  doSkillHash: doSkill3
   ui: {fileID: 2065607219009475564}
   player: {fileID: 0}
 --- !u!114 &1095783152
@@ -860,7 +860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 6
-  hotkeyLabel: 2
+  doSkillHash: doSkill2
   ui: {fileID: 5106960874474464066}
   player: {fileID: 0}
 --- !u!114 &1095783153
@@ -876,7 +876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 3
-  hotkeyLabel: 1
+  doSkillHash: doSkill1
   ui: {fileID: 5921562837093373662}
   player: {fileID: 824746514}
 --- !u!114 &1095783154
@@ -891,7 +891,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71d8e98e9d8a6b340a9dfdf8e42b970f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots: []
+  slots:
+  - key: 1
+    caster: {fileID: 1095783153}
+    enabled: 1
+  - key: 2
+    caster: {fileID: 1095783152}
+    enabled: 1
+  - key: 3
+    caster: {fileID: 1095783151}
+    enabled: 1
 --- !u!1 &1130128887
 GameObject:
   m_ObjectHideFlags: 0

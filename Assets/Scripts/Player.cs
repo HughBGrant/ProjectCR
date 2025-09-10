@@ -39,7 +39,6 @@ public class Player : MonoBehaviour
     private static readonly int DoAttackHash = Animator.StringToHash("doAttack");
     private static readonly int DoDefendHash = Animator.StringToHash("doDefend");
 
-
     void Awake()
     {
         animator = GetComponent<Animator>();
