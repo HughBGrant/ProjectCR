@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
 
     private float nextAttackTime;
 
-    public Animator animator;
+    private Animator animator;
     private Rigidbody rb;
 
     private Coroutine attackCo;
@@ -98,9 +98,7 @@ public class Player : MonoBehaviour
     {
         if (!ctx.performed) { return; }
 
-        string key = ctx.control.name;
-
-        skillManager.UseSkill(key);
+        skillManager.TryCast(ctx.control.name);
     }
     public void OnDefend(InputAction.CallbackContext context)
     {

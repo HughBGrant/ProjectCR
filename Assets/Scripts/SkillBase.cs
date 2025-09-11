@@ -1,8 +1,13 @@
 using UnityEngine;
 
-public abstract class SkillBase
+public abstract class SkillBase : ScriptableObject
 {
-    public bool isUsable;
-    public abstract void UseSkill();
+    protected string doSkillHash;
+    protected float cooldown;
 
+    public abstract void Execute(SkillContext ctx);
+    public virtual bool CanCast(SkillContext ctx)
+    {
+        return Time.time >= ctx.nextUsableTime;
+    }
 }

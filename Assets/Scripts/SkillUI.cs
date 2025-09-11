@@ -9,6 +9,8 @@ public class SkillUI : MonoBehaviour
     private Image maskImage;
     [SerializeField]
     private TextMeshProUGUI timeText;
+    [SerializeField]
+    private SkillBase currentSkill;
 
     private Coroutine cooldownRoutine;
 
