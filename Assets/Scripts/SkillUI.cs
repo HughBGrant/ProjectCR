@@ -12,23 +12,23 @@ public class SkillUI : MonoBehaviour
     [SerializeField]
     private SkillBase currentSkill;
 
-    private Coroutine cooldownRoutine;
+    private Coroutine cooldownCo;
 
     public void BeginCooldown(float duration)
     {
-        if (cooldownRoutine != null)
+        if (cooldownCo != null)
         {
-            StopCoroutine(cooldownRoutine);
+            StopCoroutine(cooldownCo);
         }
-        cooldownRoutine = StartCoroutine(CooldownRoutine(duration));
+        cooldownCo = StartCoroutine(CooldownRoutine(duration));
     }
     public void ResetCooldown()
     {
-        if (cooldownRoutine != null)
+        if (cooldownCo != null)
         {
-            StopCoroutine(cooldownRoutine);
+            StopCoroutine(cooldownCo);
         }
-        cooldownRoutine = null;
+        cooldownCo = null;
 
         maskImage.fillAmount = 0f;
         timeText.enabled = false;
@@ -54,6 +54,6 @@ public class SkillUI : MonoBehaviour
         }
         maskImage.fillAmount = 0f;
         timeText.enabled = false;
-        cooldownRoutine = null;
+        cooldownCo = null;
     }
 }

@@ -26,13 +26,12 @@ public class Player : MonoBehaviour
 
     private float nextAttackTime;
 
+    private SkillManager skillManager;
+
     private Animator animator;
     private Rigidbody rb;
 
     private Coroutine attackCo;
-
-    [SerializeField]
-    private SkillManager skillManager;
 
     private const float MoveEpsilon = 0.0001f;
 
@@ -45,6 +44,7 @@ public class Player : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        skillManager = GetComponent<SkillManager>();
     }
     void FixedUpdate()
     {

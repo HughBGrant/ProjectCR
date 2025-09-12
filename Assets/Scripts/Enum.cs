@@ -1,4 +1,4 @@
-public enum Skill
+public enum SkillType
 {
     Attack,
     Skill1,

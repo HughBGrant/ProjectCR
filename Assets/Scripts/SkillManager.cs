@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public struct SkillContext
 {
@@ -14,9 +12,14 @@ public class SkillManager : MonoBehaviour
     private SkillBase skill;
     [SerializeField]
     private SkillUI ui;
+    private float nextUsableTime;
 
     private Animator animator;
 
+    [SerializeField]
+    private List<string> keys = new List<string>() { "1" };
+    [SerializeField]
+    private List<SkillBase> skills = new List<SkillBase>();
     private Dictionary<string, int> keyToIndex;
 
     private void Awake()
@@ -24,18 +27,41 @@ public class SkillManager : MonoBehaviour
         animator = GetComponent<Animator>();
         keyToIndex = new Dictionary<string, int>();
 
-        //for (int i = 0; i < slots.Count; i++)
-        //{
-        //    keyToIndex[slots[i].key] = i;
-        //}
+        for (int i = 0; i < Mathf.Min(keys.Count, skills.Count); i++)
+        {
+            keyToIndex[(keys[i] ?? "").Trim().ToLowerInvariant()] = i;
+        }
     }
     private void Start()
     {
-        if (ui) ui.ResetCooldown();
+        if (ui)
+        {
+            ui.ResetCooldown();
+        }
     }
-    public void TryCast(string key)
+    public bool TryCast(string key)
     {
-        int index = keyToIndex[key];
-        //slots[index].caster.Execute();
+        key = (key ?? "").ToLowerInvariant();
+        int idx = keyToIndex != null && keyToIndex.TryGetValue(key, out var i) ? i : 0;
+
+        if (skill == null)
+        {
+            return false;
+        }
+        var ctx = new SkillContext{ animator = animator, nextUsableTime = nextUsableTime };
+
+        if (!skill.CanExecute(ctx))
+        {
+            return false;
+        }
+
+        skill.Execute(ctx);
+        nextUsableTime = Time.time + skill.cooldown;
+
+        if (ui != null)
+        {
+            ui.BeginCooldown(skill.cooldown);
+        }
+        return true;
     }
 }
