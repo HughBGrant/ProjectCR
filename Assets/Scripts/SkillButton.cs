@@ -3,14 +3,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkillUI : MonoBehaviour
+public class SkillButton : MonoBehaviour
 {
     [SerializeField]
     private Image maskImage;
     [SerializeField]
     private TextMeshProUGUI timeText;
     [SerializeField]
-    private SkillBase currentSkill;
+    private SkillData currentSkill;
 
     private Coroutine cooldownCo;
 

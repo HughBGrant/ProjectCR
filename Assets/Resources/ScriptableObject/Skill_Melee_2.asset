@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 559355943dc0270428019b6fa2de9a78, type: 3}
-  m_Name: Skill3
+  m_Name: Skill_Melee_2
   m_EditorClassIdentifier: 
-  animationName: doSkill3
-  cooldown: 9
+  animationName: doSkill2
+  cooldown: 6

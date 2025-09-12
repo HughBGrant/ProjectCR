@@ -9,9 +9,9 @@ public struct SkillContext
 public class SkillManager : MonoBehaviour
 {
     [SerializeField]
-    private SkillBase skill;
+    private SkillData skill;
     [SerializeField]
-    private SkillUI ui;
+    private SkillButton ui;
     private float nextUsableTime;
 
     private Animator animator;
@@ -19,7 +19,7 @@ public class SkillManager : MonoBehaviour
     [SerializeField]
     private List<string> keys = new List<string>() { "1" };
     [SerializeField]
-    private List<SkillBase> skills = new List<SkillBase>();
+    private List<SkillData> skills = new List<SkillData>();
     private Dictionary<string, int> keyToIndex;
 
     private void Awake()

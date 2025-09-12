@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Skills/MeleeSkill")]
-public class MeleeSkill : SkillBase
+public class MeleeSkillData : SkillData
 {
     public override void Execute(SkillContext ctx)
     {

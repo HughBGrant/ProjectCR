@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public abstract class SkillBase : ScriptableObject
+public abstract class SkillData : ScriptableObject
 {
     public string animationName;
     public float cooldown;
