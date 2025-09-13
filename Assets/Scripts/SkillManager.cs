@@ -8,40 +8,46 @@ public class SkillManager : MonoBehaviour
     //[SerializeField]
     //private List<SkillButton> slots;
     [System.Serializable]
-    struct SlotBinding {
+    struct SlotBinding
+    {
         public string key;
         public SkillButton slot;
     }
     [SerializeField]
     private List<SlotBinding> bindings;
 
-    private Dictionary<string, int> keyToIndex;
+    //private Dictionary<string, int> keyToIndex;
+    private Dictionary<string, SkillButton> keySlotMap;
     private Animator animator;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        keyToIndex = new Dictionary<string, int>();
+        //keyToIndex = new Dictionary<string, int>();
+        keySlotMap = new Dictionary<string, SkillButton>();
 
-        for (int i = 0; i < bindings.Count; i++)
+        foreach (SlotBinding binding in bindings)
         {
-            string k = (bindings[i].key ?? "").Trim().ToLowerInvariant();
-            if (!string.IsNullOrEmpty(k))
+            string key = (binding.key ?? "").Trim().ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(key) || binding.slot == null)
             {
-                keyToIndex[k] = i;
+                Debug.LogWarning($"[SkillManager] 빈 키/빈 슬롯 바인딩 무시: '{binding.key}'");
+                continue;
             }
+            keySlotMap[key] = binding.slot;
         }
     }
     public bool TryActivateSlot(string key)
     {
-        key = (key ?? "").ToLowerInvariant();
-        if (keyToIndex != null && keyToIndex.TryGetValue(key, out int idx))
+        if (string.IsNullOrEmpty(key))
         {
-            if (idx >= 0 && idx < bindings.Count && bindings[idx].slot != null)
-            {
-                return bindings[idx].slot.TryUseSkill(animator);
-            }
+            return false;
         }
-        return false;
+        if (!keySlotMap.TryGetValue(key.ToLowerInvariant(), out SkillButton slot))
+        {
+            return false;
+        }
+        return slot.TryUseSkill(animator);
     }
 }
