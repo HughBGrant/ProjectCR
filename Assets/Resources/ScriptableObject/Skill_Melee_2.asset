@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 559355943dc0270428019b6fa2de9a78, type: 3}
   m_Name: Skill_Melee_2
   m_EditorClassIdentifier: 
-  animationName: doSkill2
-  cooldownTime: 6
+  animTrigger: doSkill2
+  cooldown: 6
   icon: {fileID: 21300000, guid: 8a96b38c76be79946a150249547b07bc, type: 3}
