@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Skill_Melee_1
   m_EditorClassIdentifier: 
   animationName: doSkill1
-  cooldown: 3
+  cooldownTime: 3
+  icon: {fileID: 21300000, guid: 4029a9cfeb86f134c9c5af05993eaac8, type: 3}
