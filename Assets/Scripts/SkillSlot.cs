@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class SkillButton : MonoBehaviour
+public class SkillSlot : MonoBehaviour
 {
     [SerializeField]
     private Image iconImage;
@@ -20,11 +20,15 @@ public class SkillButton : MonoBehaviour
 
     private void Start()
     {
-        if (equippedSkill != null)
+        RefreshIcon();
+        ResetCooldown();
+    }
+    private void RefreshIcon()
+    {
+        if (iconImage != null && equippedSkill != null)
         {
             iconImage.sprite = equippedSkill.icon;
         }
-        ResetCooldown();
     }
     public void ResetCooldown()
     {
@@ -35,7 +39,6 @@ public class SkillButton : MonoBehaviour
         cooldownCo = null;
 
         maskImage.fillAmount = 0f;
-        //timeText.text = "";
         timeText.enabled = false;
     }
     public bool TryUseSkill(Animator animator)
@@ -44,7 +47,7 @@ public class SkillButton : MonoBehaviour
         {
             return false;
         }
-        SkillContext ctx = new SkillContext(){
+        SkillContext ctx = new SkillContext() {
             animator = animator,
             nextUsableTime = nextUsableTime
         };
@@ -53,6 +56,7 @@ public class SkillButton : MonoBehaviour
             return false;
         }
         equippedSkill.Execute(ctx);
+
         nextUsableTime = Time.time + equippedSkill.cooldown;
 
         if (equippedSkill.cooldown > 0f)
@@ -87,15 +91,11 @@ public class SkillButton : MonoBehaviour
                 ? Mathf.CeilToInt(remain).ToString()
                 : remain.ToString("0.0");
 
-            yield return null; // 다음 프레임까지 대기
+            yield return null;
         }
         maskImage.fillAmount = 0f;
-        //timeText.text = "";
         timeText.enabled = false;
-        cooldownCo = null;
-    }
-    void Refresh()
-    {
 
+        cooldownCo = null;
     }
 }

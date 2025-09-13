@@ -3,28 +3,22 @@ using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
-    //[SerializeField]
-    //private List<string> keys;
-    //[SerializeField]
-    //private List<SkillButton> slots;
     [System.Serializable]
     struct SlotBinding
     {
         public string key;
-        public SkillButton slot;
+        public SkillSlot slot;
     }
     [SerializeField]
     private List<SlotBinding> bindings;
 
-    //private Dictionary<string, int> keyToIndex;
-    private Dictionary<string, SkillButton> keySlotMap;
+    private Dictionary<string, SkillSlot> keySlotMap;
     private Animator animator;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        //keyToIndex = new Dictionary<string, int>();
-        keySlotMap = new Dictionary<string, SkillButton>();
+        keySlotMap = new Dictionary<string, SkillSlot>();
 
         foreach (SlotBinding binding in bindings)
         {
@@ -40,11 +34,11 @@ public class SkillManager : MonoBehaviour
     }
     public bool TryActivateSlot(string key)
     {
-        if (string.IsNullOrEmpty(key))
+        if (string.IsNullOrEmpty(key) || keySlotMap == null)
         {
             return false;
         }
-        if (!keySlotMap.TryGetValue(key.ToLowerInvariant(), out SkillButton slot))
+        if (!keySlotMap.TryGetValue(key.ToLowerInvariant(), out SkillSlot slot))
         {
             return false;
         }
