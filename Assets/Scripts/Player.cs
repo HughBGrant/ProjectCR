@@ -94,7 +94,7 @@ public class Player : MonoBehaviour
             isAttackHeld = false;
         }
     }
-    public void OnSkill(InputAction.CallbackContext ctx)
+    public void OnUseSkill(InputAction.CallbackContext ctx)
     {
         if (!ctx.performed) { return; }
 
