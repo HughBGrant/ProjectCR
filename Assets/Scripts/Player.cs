@@ -98,7 +98,7 @@ public class Player : MonoBehaviour
     {
         if (!ctx.performed) { return; }
 
-        skillManager.TryCast(ctx.control.name);
+        skillManager.TryActivateSlot(ctx.control.name);
     }
     public void OnDefend(InputAction.CallbackContext context)
     {
@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
             if (Time.time > nextAttackTime)
             {
                 animator.SetTrigger(DoAttackHash);
-                nextAttackTime = Time.time + 0.4f;
+                nextAttackTime = Time.time + 0.4f;/////////////
             }
             yield return null;
         }

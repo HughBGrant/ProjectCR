@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationName: doSkill3
   cooldownTime: 9
-  icon: {fileID: 21300000, guid: 3925691c2a021aa429c1dc89712a1253, type: 3}
+  icon: {fileID: 21300000, guid: 313eb4d0157f6ec418d857892d7b44ad, type: 3}

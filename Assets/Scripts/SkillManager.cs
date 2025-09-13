@@ -1,17 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct SkillContext
-{
-    public Animator animator;
-    public float nextUsableTime;
-}
 public class SkillManager : MonoBehaviour
 {
     [SerializeField]
-    private List<string> keys = new List<string>() { "1" };
+    private List<string> keys;
     [SerializeField]
-    private List<SkillButton> slots = new List<SkillButton>();
+    private List<SkillButton> slots;
 
 
     private Dictionary<string, int> keyToIndex;
@@ -31,14 +26,15 @@ public class SkillManager : MonoBehaviour
             }
         }
     }
-    public bool TryCast(string key)
+
+    public bool TryActivateSlot(string key)
     {
         key = (key ?? "").ToLowerInvariant();
         if (keyToIndex != null && keyToIndex.TryGetValue(key, out int idx))
         {
             if (idx >= 0 && idx < slots.Count && slots[idx] != null)
             {
-                return slots[idx].TryCast(animator);
+                return slots[idx].TryUseSkill(animator);
             }
         }
         return false;

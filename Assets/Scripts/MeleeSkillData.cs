@@ -5,9 +5,9 @@ public class MeleeSkillData : SkillData
 {
     public override void Execute(SkillContext ctx)
     {
-        if (ctx.animator && !string.IsNullOrEmpty(animationName))
+        if (ctx.animator && !string.IsNullOrEmpty(animTrigger))
         {
-            ctx.animator.SetTrigger(animationName);
+            ctx.animator.SetTrigger(animTrigger);
         }
     }
 }

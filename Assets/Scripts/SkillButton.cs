@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class SkillButton : MonoBehaviour
@@ -12,14 +13,17 @@ public class SkillButton : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI timeText;
     [SerializeField]
-    private SkillData skillData;
+    private SkillData equippedSkill;
 
     private Coroutine cooldownCo;
     private float nextUsableTime;
 
     private void Start()
     {
-        iconImage.sprite = skillData.icon;
+        if (equippedSkill != null)
+        {
+            iconImage.sprite = equippedSkill.icon;
+        }
         ResetCooldown();
     }
     public void ResetCooldown()
@@ -31,12 +35,12 @@ public class SkillButton : MonoBehaviour
         cooldownCo = null;
 
         maskImage.fillAmount = 0f;
+        //timeText.text = "";
         timeText.enabled = false;
-        timeText.text = "";
     }
-    public bool TryCast(Animator animator)
+    public bool TryUseSkill(Animator animator)
     {
-        if (skillData == null)
+        if (equippedSkill == null)
         {
             return false;
         }
@@ -44,16 +48,16 @@ public class SkillButton : MonoBehaviour
             animator = animator,
             nextUsableTime = nextUsableTime
         };
-        if (!skillData.CanExecute(ctx))
+        if (!equippedSkill.CanExecute(ctx))
         {
             return false;
         }
-        skillData.Execute(ctx);
-        nextUsableTime = Time.time + skillData.cooldownTime;
+        equippedSkill.Execute(ctx);
+        nextUsableTime = Time.time + equippedSkill.cooldown;
 
-        if (skillData.cooldownTime > 0f)
+        if (equippedSkill.cooldown > 0f)
         {
-            BeginCooldown(skillData.cooldownTime);
+            BeginCooldown(equippedSkill.cooldown);
         }
         return true;
     }
@@ -71,7 +75,7 @@ public class SkillButton : MonoBehaviour
         float endTime = Time.time + duration;
 
         maskImage.fillAmount = 1f;
-        timeText.enabled = duration > 0.05f;
+        timeText.enabled = true;
 
         while (Time.time < endTime)
         {
@@ -79,15 +83,19 @@ public class SkillButton : MonoBehaviour
             maskImage.fillAmount = remain / duration;
 
             // 10초 미만은 소수 1자리, 그 외 정수
-            timeText.text = remain < 10f
-                ? remain.ToString("0.0")
-                : Mathf.CeilToInt(remain).ToString();
+            timeText.text = remain > 10f
+                ? Mathf.CeilToInt(remain).ToString()
+                : remain.ToString("0.0");
 
             yield return null; // 다음 프레임까지 대기
         }
         maskImage.fillAmount = 0f;
+        //timeText.text = "";
         timeText.enabled = false;
         cooldownCo = null;
     }
+    void Refresh()
+    {
 
+    }
 }

@@ -3,8 +3,8 @@ using UnityEngine.Serialization;
 
 public abstract class SkillData : ScriptableObject
 {
-    public string animationName;
-    public float cooldownTime;
+    public string animTrigger;
+    public float cooldown;
     public Sprite icon;
 
     public abstract void Execute(SkillContext ctx);
