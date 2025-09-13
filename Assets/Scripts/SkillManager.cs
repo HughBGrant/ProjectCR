@@ -1,65 +1,46 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
+public struct SkillContext
+{
+    public Animator animator;
+    public float nextUsableTime;
+}
 public class SkillManager : MonoBehaviour
 {
-    [Serializable]
-    public class Slot
-    {
-        public string key = "1";
-
-        public SkillCaster caster;
-
-        public bool enabled = true;
-    }
     [SerializeField]
-    private List<Slot> slots = new List<Slot>();
+    private List<string> keys = new List<string>() { "1" };
+    [SerializeField]
+    private List<SkillButton> slots = new List<SkillButton>();
+
 
     private Dictionary<string, int> keyToIndex;
+    private Animator animator;
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         keyToIndex = new Dictionary<string, int>();
-        for (int i = 0; i < slots.Count; i++)
+
+        for (int i = 0; i < Mathf.Min(keys.Count, slots.Count); i++)
         {
-            if (slots[i] == null || slots[i].caster == null) { continue; }
-
-            string k = (slots[i].key ?? "").Trim().ToLowerInvariant();
-
-            if (string.IsNullOrEmpty(k)) { continue; }
-
-            keyToIndex[k] = i;
+            string k = (keys[i] ?? "").Trim().ToLowerInvariant();
+            if (!string.IsNullOrEmpty(k))
+            {
+                keyToIndex[k] = i;
+            }
         }
     }
-    public void OnSkill(InputAction.CallbackContext ctx)
+    public bool TryCast(string key)
     {
-        if (!ctx.performed) { return; }
-
-        string k = (ctx.control?.name ?? "").ToLowerInvariant();
-        if (string.IsNullOrEmpty(k)) { return; }
-
-        if (keyToIndex.TryGetValue(k, out int idx))
+        key = (key ?? "").ToLowerInvariant();
+        if (keyToIndex != null && keyToIndex.TryGetValue(key, out int idx))
         {
-            TryCastSlot(idx);
+            if (idx >= 0 && idx < slots.Count && slots[idx] != null)
+            {
+                return slots[idx].TryCast(animator);
+            }
         }
-        else
-        {
-        }
+        return false;
     }
-    private void TryCastSlot(int index)
-    {
-        if (index < 0 || index >= slots.Count) { return; }
-
-        Slot slot = slots[index];
-
-        if (slot == null || !slot.enabled || slot.caster == null) { return; }
-
-        slot.caster.TryCast();
-    }
-    //public void OnClickSlot(int index)
-    //{
-    //    TryCastSlot(index);
-    //}
 }

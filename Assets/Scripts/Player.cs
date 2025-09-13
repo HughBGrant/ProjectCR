@@ -26,11 +26,12 @@ public class Player : MonoBehaviour
 
     private float nextAttackTime;
 
-    public Animator animator;
+    private SkillManager skillManager;
+
+    private Animator animator;
     private Rigidbody rb;
 
     private Coroutine attackCo;
-
 
     private const float MoveEpsilon = 0.0001f;
 
@@ -43,6 +44,7 @@ public class Player : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        skillManager = GetComponent<SkillManager>();
     }
     void FixedUpdate()
     {
@@ -91,6 +93,12 @@ public class Player : MonoBehaviour
         {
             isAttackHeld = false;
         }
+    }
+    public void OnUseSkill(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) { return; }
+
+        skillManager.TryCast(ctx.control.name);
     }
     public void OnDefend(InputAction.CallbackContext context)
     {
