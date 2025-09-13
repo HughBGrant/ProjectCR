@@ -32,7 +32,7 @@ public class SkillManager : MonoBehaviour
             keySlotMap[key] = binding.slot;
         }
     }
-    public bool TryActivateSlot(string key)
+    public bool TryUseSkill(string key)
     {
         if (string.IsNullOrEmpty(key) || keySlotMap == null)
         {

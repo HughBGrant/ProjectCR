@@ -47,6 +47,8 @@ public class SkillSlot : MonoBehaviour
         {
             return false;
         }
+        //if (Time.time < nextUsableTime) return false;
+
         SkillContext ctx = new SkillContext() {
             animator = animator,
             nextUsableTime = nextUsableTime

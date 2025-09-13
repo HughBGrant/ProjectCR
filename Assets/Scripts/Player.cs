@@ -98,7 +98,7 @@ public class Player : MonoBehaviour
     {
         if (!ctx.performed) { return; }
 
-        skillManager.TryActivateSlot(ctx.control.name);
+        skillManager.TryUseSkill(ctx.control.name);
     }
     public void OnDefend(InputAction.CallbackContext context)
     {
