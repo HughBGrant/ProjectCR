@@ -14,7 +14,7 @@ public abstract class SkillData : ScriptableObject
         doSkillHash = Animator.StringToHash(animTrigger);
     }
 
-    public abstract void Execute(SkillContext ctx);
+    public abstract void Execute();
     public virtual bool CanExecute(SkillContext ctx)
     {
         return (Time.time >= ctx.cooldownEndTime);

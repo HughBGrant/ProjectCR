@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+public struct SkillContext
+{
+    public Animator animator;
+    public float cooldownEndTime;
+}
 public class SkillManager : MonoBehaviour
 {
     [System.Serializable]
@@ -57,9 +61,9 @@ public class SkillManager : MonoBehaviour
 
         if (!skill.CanExecute(ctx)) { return false; }
 
-        ctx.animator.SetTrigger(skill.doSkillHash);
+        animator.SetTrigger(skill.doSkillHash);
         
-        skill.Execute(ctx);
+        skill.Execute();
 
         float addedCooldown = Mathf.Max(0f, skill.cooldown);
         slot.PlayCooldownUI(addedCooldown);
