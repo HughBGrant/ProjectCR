@@ -57,6 +57,8 @@ public class SkillManager : MonoBehaviour
 
         if (!skill.CanExecute(ctx)) { return false; }
 
+        ctx.animator.SetTrigger(skill.doSkillHash);
+        
         skill.Execute(ctx);
 
         float addedCooldown = Mathf.Max(0f, skill.cooldown);
