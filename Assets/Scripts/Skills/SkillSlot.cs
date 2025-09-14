@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class SkillSlot : MonoBehaviour
@@ -12,34 +11,32 @@ public class SkillSlot : MonoBehaviour
     private Image maskImage;
     [SerializeField]
     private TextMeshProUGUI timeText;
-    [SerializeField]
-    private SkillData equippedSkill;
-    public SkillData EquippedSkill
+
+    private SkillRuntime runtime;
+    public SkillRuntime Runtime
     {
-        get {  return equippedSkill; }
+        get { return runtime; }
     }
-
     private Coroutine cooldownCo;
-
-
     private void OnEnable()
     {
         RefreshIcon();
         maskImage.fillAmount = 0f;
         timeText.enabled = false;
     }
-    private void Reset()
+    public void SetSkillRuntime(SkillRuntime runtime)
     {
+        this.runtime = runtime;
         RefreshIcon();
     }
     private void RefreshIcon()
     {
         if (iconImage == null) { return; }
 
-        if (equippedSkill != null && equippedSkill.icon != null)
+        if (runtime != null && runtime.data.icon != null)
         {
             iconImage.enabled = true;
-            iconImage.sprite = equippedSkill.icon;
+            iconImage.sprite = runtime.data.icon;
         }
         else
         {

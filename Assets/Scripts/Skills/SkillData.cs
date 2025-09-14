@@ -5,18 +5,19 @@ public abstract class SkillData : ScriptableObject
 {
     public string animTrigger;
     [HideInInspector]
-    public int doSkillHash; // 해시값
+    public int useSkillHash; // 해시값
 
     public float cooldown;
     public Sprite icon;
+
     private void OnEnable()
     {
-        doSkillHash = Animator.StringToHash(animTrigger);
+        useSkillHash = Animator.StringToHash(animTrigger);
     }
 
     public abstract void Execute();
-    public virtual bool CanExecute(SkillContext ctx)
-    {
-        return (Time.time >= ctx.cooldownEndTime);
-    }
+    //public virtual bool CanExecute(SkillContext ctx)
+    //{
+    //    return (Time.time >= ctx.cooldownEndTime);
+    //}
 }
