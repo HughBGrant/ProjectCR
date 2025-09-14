@@ -17,6 +17,6 @@ public abstract class SkillData : ScriptableObject
     public abstract void Execute(SkillContext ctx);
     public virtual bool CanExecute(SkillContext ctx)
     {
-        return (Time.time >= ctx.nextUsableTime);
+        return (Time.time >= ctx.cooldownEndTime);
     }
 }

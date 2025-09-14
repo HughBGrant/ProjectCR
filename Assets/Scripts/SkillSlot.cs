@@ -14,60 +14,40 @@ public class SkillSlot : MonoBehaviour
     private TextMeshProUGUI timeText;
     [SerializeField]
     private SkillData equippedSkill;
+    public SkillData EquippedSkill
+    {
+        get {  return equippedSkill; }
+    }
 
     private Coroutine cooldownCo;
-    private float nextUsableTime;
 
-    private void Start()
+
+    private void OnEnable()
     {
         RefreshIcon();
-        ResetCooldown();
-    }
-    private void RefreshIcon()
-    {
-        if (iconImage != null && equippedSkill != null)
-        {
-            iconImage.sprite = equippedSkill.icon;
-        }
-    }
-    public void ResetCooldown()
-    {
-        if (cooldownCo != null)
-        {
-            StopCoroutine(cooldownCo);
-        }
-        cooldownCo = null;
-
         maskImage.fillAmount = 0f;
         timeText.enabled = false;
     }
-    public bool TryUseSkill(Animator animator)
+    private void Reset()
     {
-        if (equippedSkill == null)
-        {
-            return false;
-        }
-        //if (Time.time < nextUsableTime) return false;
-
-        SkillContext ctx = new SkillContext() {
-            animator = animator,
-            nextUsableTime = nextUsableTime
-        };
-        if (!equippedSkill.CanExecute(ctx))
-        {
-            return false;
-        }
-        equippedSkill.Execute(ctx);
-
-        nextUsableTime = Time.time + equippedSkill.cooldown;
-
-        if (equippedSkill.cooldown > 0f)
-        {
-            BeginCooldown(equippedSkill.cooldown);
-        }
-        return true;
+        RefreshIcon();
     }
-    public void BeginCooldown(float duration)
+    private void RefreshIcon()
+    {
+        if (iconImage == null) { return; }
+
+        if (equippedSkill != null && equippedSkill.icon != null)
+        {
+            iconImage.enabled = true;
+            iconImage.sprite = equippedSkill.icon;
+        }
+        else
+        {
+            iconImage.enabled = false;
+            iconImage.sprite = null;
+        }
+    }
+    public void PlayCooldownUI(float duration)
     {
         if (cooldownCo != null)
         {
@@ -78,14 +58,16 @@ public class SkillSlot : MonoBehaviour
     private IEnumerator CooldownRoutine(float duration)
     {
         duration = Mathf.Max(0f, duration);
-        float endTime = Time.time + duration;
 
         maskImage.fillAmount = 1f;
         timeText.enabled = true;
 
+        float endTime = Time.time + duration;
+
         while (Time.time < endTime)
         {
-            float remain = Mathf.Max(0f, endTime - Time.time);
+            float remain = endTime - Time.time;
+
             maskImage.fillAmount = remain / duration;
 
             // 10초 미만은 소수 1자리, 그 외 정수

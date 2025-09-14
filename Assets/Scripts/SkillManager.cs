@@ -11,37 +11,59 @@ public class SkillManager : MonoBehaviour
     }
     [SerializeField]
     private List<SlotBinding> bindings;
+    private Dictionary<string, float> keyToEndTimes = new Dictionary<string, float>();
+    private Dictionary<string, SkillSlot> keyToSlot = new Dictionary<string, SkillSlot>();
 
-    private Dictionary<string, SkillSlot> keySlotMap;
     private Animator animator;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        keySlotMap = new Dictionary<string, SkillSlot>();
+
+        keyToSlot = new Dictionary<string, SkillSlot>();
 
         foreach (SlotBinding binding in bindings)
         {
-            string key = (binding.key ?? "").Trim().ToLowerInvariant();
-
-            if (string.IsNullOrEmpty(key) || binding.slot == null)
+            if (string.IsNullOrEmpty(binding.key) || binding.slot == null)
             {
-                Debug.LogWarning($"[SkillManager] 빈 키/빈 슬롯 바인딩 무시: '{binding.key}'");
                 continue;
             }
-            keySlotMap[key] = binding.slot;
+            string key = binding.key.Trim().ToLowerInvariant();
+
+            keyToSlot[key] = binding.slot;
+            keyToEndTimes[key] = 0f;
+
         }
     }
     public bool TryUseSkill(string key)
     {
-        if (string.IsNullOrEmpty(key) || keySlotMap == null)
+        if (string.IsNullOrEmpty(key)) { return false; }
+
+        key = key.ToLowerInvariant();
+
+        if (!keyToSlot.TryGetValue(key, out SkillSlot slot)) { return false; }
+
+        SkillData skill = slot.EquippedSkill;
+
+        if (skill == null) { return false; }
+        
+        float endTime = keyToEndTimes.TryGetValue(key, out float time) ? time : 0f;
+
+        SkillContext ctx = new SkillContext()
         {
-            return false;
-        }
-        if (!keySlotMap.TryGetValue(key.ToLowerInvariant(), out SkillSlot slot))
-        {
-            return false;
-        }
-        return slot.TryUseSkill(animator);
+            animator = animator,
+            cooldownEndTime = endTime
+        };
+
+        if (!skill.CanExecute(ctx)) { return false; }
+
+        skill.Execute(ctx);
+
+        float addedCooldown = Mathf.Max(0f, skill.cooldown);
+        slot.PlayCooldownUI(addedCooldown);
+        keyToEndTimes[key] = Time.time + addedCooldown;
+
+        return true;
     }
+
 }

@@ -1861,6 +1861,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1791118803}
   - component: {fileID: 1791118804}
+  - component: {fileID: 1791118805}
   m_Layer: 5
   m_Name: SkillSlot3
   m_TagString: Untagged
@@ -1906,6 +1907,14 @@ MonoBehaviour:
   maskImage: {fileID: 763735837}
   timeText: {fileID: 368337203}
   equippedSkill: {fileID: 11400000, guid: 30caff2bec36c6244be33dfc28558401, type: 2}
+--- !u!222 &1791118805
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791118802}
+  m_CullTransparentMesh: 1
 --- !u!1 &1829702392
 GameObject:
   m_ObjectHideFlags: 0
@@ -1991,6 +2000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1949231862}
   - component: {fileID: 1949231863}
+  - component: {fileID: 1949231864}
   m_Layer: 5
   m_Name: SkillSlot2
   m_TagString: Untagged
@@ -2036,6 +2046,14 @@ MonoBehaviour:
   maskImage: {fileID: 1559545265}
   timeText: {fileID: 1552499796}
   equippedSkill: {fileID: 11400000, guid: 514e69064049b9949b5fc4f7801e6d72, type: 2}
+--- !u!222 &1949231864
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949231861}
+  m_CullTransparentMesh: 1
 --- !u!222 &1265828940343357546
 CanvasRenderer:
   m_ObjectHideFlags: 0
