@@ -987,10 +987,13 @@ MonoBehaviour:
   bindings:
   - key: 1
     slot: {fileID: 5921562837093373662}
+    skillData: {fileID: 11400000, guid: 0b67fd990c8781c4e88814c768d86644, type: 2}
   - key: 2
     slot: {fileID: 1949231863}
+    skillData: {fileID: 11400000, guid: 514e69064049b9949b5fc4f7801e6d72, type: 2}
   - key: 3
     slot: {fileID: 1791118804}
+    skillData: {fileID: 11400000, guid: 30caff2bec36c6244be33dfc28558401, type: 2}
 --- !u!1 &923593310
 GameObject:
   m_ObjectHideFlags: 0
@@ -1906,7 +1909,6 @@ MonoBehaviour:
   iconImage: {fileID: 923593312}
   maskImage: {fileID: 763735837}
   timeText: {fileID: 368337203}
-  equippedSkill: {fileID: 11400000, guid: 30caff2bec36c6244be33dfc28558401, type: 2}
 --- !u!222 &1791118805
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2045,7 +2047,6 @@ MonoBehaviour:
   iconImage: {fileID: 209361527}
   maskImage: {fileID: 1559545265}
   timeText: {fileID: 1552499796}
-  equippedSkill: {fileID: 11400000, guid: 514e69064049b9949b5fc4f7801e6d72, type: 2}
 --- !u!222 &1949231864
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2338,7 +2339,6 @@ MonoBehaviour:
   iconImage: {fileID: 4850630373367431205}
   maskImage: {fileID: 6209951706981551036}
   timeText: {fileID: 5312686651118162454}
-  equippedSkill: {fileID: 11400000, guid: 0b67fd990c8781c4e88814c768d86644, type: 2}
 --- !u!222 &5921562837093373663
 CanvasRenderer:
   m_ObjectHideFlags: 0
