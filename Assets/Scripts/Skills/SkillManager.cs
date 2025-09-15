@@ -4,14 +4,14 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     [System.Serializable]
-    struct SlotBinding
+    struct SkillBinding
     {
         public string key;
         public SkillSlot slot;
         public SkillData skillData;
     }
     [SerializeField]
-    private List<SlotBinding> bindings;
+    private List<SkillBinding> bindings;
     private Dictionary<string, SkillSlot> keyToSlot = new Dictionary<string, SkillSlot>();
 
     private Animator animator;
@@ -20,10 +20,10 @@ public class SkillManager : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        foreach (SlotBinding binding in bindings)
+        foreach (SkillBinding binding in bindings)
         {
-            SkillRuntime runtime = new SkillRuntime(binding.skillData);
-            binding.slot.Runtime = runtime;
+            SkillInstance skill = new SkillInstance(binding.skillData);
+            binding.slot.Skill = skill;
             keyToSlot[binding.key.Trim().ToLowerInvariant()] = binding.slot;
         }
     }
@@ -31,16 +31,17 @@ public class SkillManager : MonoBehaviour
     {
         if (!keyToSlot.TryGetValue(key.ToLowerInvariant(), out SkillSlot slot)) { return false; }
 
-        SkillRuntime runtime = slot.Runtime;
+        SkillInstance skill = slot.Skill;
 
-        //스킬 실행
-        if (!runtime.StartCooldown()) {  return false; }
+        if (!skill.CanExecute()) {  return false; }
         
-        //runtime.data.Execute();
+        skill.data.Execute();
+        skill.StartCooldown();
+        
         //애니메이션 실행
-        animator.SetTrigger(runtime.data.useSkillHash);
+        animator.SetTrigger(skill.data.useSkillHash);
         //스킬 UI 실행
-        slot.PlayCooldownUI(runtime.data.cooldown);
+        slot.PlayCooldownUI(skill.data.cooldown);
 
         return true;
     }

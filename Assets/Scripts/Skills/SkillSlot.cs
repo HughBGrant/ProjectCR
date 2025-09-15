@@ -12,13 +12,13 @@ public class SkillSlot : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI timeText;
 
-    private SkillRuntime runtime;
-    public SkillRuntime Runtime
+    private SkillInstance skill;
+    public SkillInstance Skill
     {
-        get { return runtime; }
+        get { return skill; }
         set
         {
-            runtime = value;
+            skill = value;
             RefreshIcon();
         }
     }
@@ -31,7 +31,7 @@ public class SkillSlot : MonoBehaviour
     private void RefreshIcon()
     {
         iconImage.enabled = true;
-        iconImage.sprite = runtime.data.icon;
+        iconImage.sprite = skill.data.icon;
     }
     public void PlayCooldownUI(float cooldownTime)
     {

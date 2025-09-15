@@ -1,24 +1,19 @@
 using UnityEngine;
 
 [System.Serializable]
-public class SkillRuntime
+public class SkillInstance
 {
     public SkillData data;
     public float cooldownEndTime;
 
-    public SkillRuntime(SkillData data)
+    public SkillInstance(SkillData data)
     {
         this.data = data;
         cooldownEndTime = 0f;
     }
-    public bool StartCooldown()
-    {
-        if (!CanExecute()) { return false; }
-
-        data.Execute();
+    public void StartCooldown()
+    { 
         cooldownEndTime = Time.time + Mathf.Max(0f, data.cooldown);
-
-        return true;
     }
     public bool CanExecute()
     {
