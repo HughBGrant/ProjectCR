@@ -33,13 +33,13 @@ public class SkillManager : MonoBehaviour
 
         SkillRuntime runtime = slot.Runtime;
 
-        if (!runtime.CanExecute()) { return false; }
-
-        animator.SetTrigger(runtime.data.useSkillHash);
+        //스킬 실행
+        if (!runtime.StartCooldown()) {  return false; }
         
-        runtime.StartCooldown();
         //runtime.data.Execute();
-
+        //애니메이션 실행
+        animator.SetTrigger(runtime.data.useSkillHash);
+        //스킬 UI 실행
         slot.PlayCooldownUI(runtime.data.cooldown);
 
         return true;
