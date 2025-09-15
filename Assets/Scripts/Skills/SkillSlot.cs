@@ -16,67 +16,56 @@ public class SkillSlot : MonoBehaviour
     public SkillRuntime Runtime
     {
         get { return runtime; }
+        set
+        {
+            runtime = value;
+            RefreshIcon();
+        }
     }
     private Coroutine cooldownCo;
     private void OnEnable()
     {
         RefreshIcon();
-        maskImage.fillAmount = 0f;
-        timeText.enabled = false;
-    }
-    public void SetSkillRuntime(SkillRuntime runtime)
-    {
-        this.runtime = runtime;
-        RefreshIcon();
+        SwitchCooldown(false);
     }
     private void RefreshIcon()
     {
-        if (iconImage == null) { return; }
-
-        if (runtime != null && runtime.data.icon != null)
-        {
-            iconImage.enabled = true;
-            iconImage.sprite = runtime.data.icon;
-        }
-        else
-        {
-            iconImage.enabled = false;
-            iconImage.sprite = null;
-        }
+        iconImage.enabled = true;
+        iconImage.sprite = runtime.data.icon;
     }
-    public void PlayCooldownUI(float duration)
+    public void PlayCooldownUI(float cooldownTime)
     {
         if (cooldownCo != null)
         {
             StopCoroutine(cooldownCo);
         }
-        cooldownCo = StartCoroutine(CooldownRoutine(duration));
+        cooldownCo = StartCoroutine(CooldownRoutine(cooldownTime));
     }
-    private IEnumerator CooldownRoutine(float duration)
+    private IEnumerator CooldownRoutine(float cooldownTime)
     {
-        duration = Mathf.Max(0f, duration);
+        SwitchCooldown(true);
 
-        maskImage.fillAmount = 1f;
-        timeText.enabled = true;
-
-        float endTime = Time.time + duration;
+        float endTime = Time.time + cooldownTime;
 
         while (Time.time < endTime)
         {
-            float remain = endTime - Time.time;
+            float remainingTime = endTime - Time.time;
 
-            maskImage.fillAmount = remain / duration;
+            maskImage.fillAmount = remainingTime / cooldownTime;
 
-            // 10초 미만은 소수 1자리, 그 외 정수
-            timeText.text = remain > 10f
-                ? Mathf.CeilToInt(remain).ToString()
-                : remain.ToString("0.0");
+            timeText.text = remainingTime >= 10f
+                ? Mathf.CeilToInt(remainingTime).ToString()
+                : remainingTime.ToString("0.0");
 
             yield return null;
         }
-        maskImage.fillAmount = 0f;
-        timeText.enabled = false;
+        SwitchCooldown(false);
 
         cooldownCo = null;
+    }
+    private void SwitchCooldown(bool state)
+    {
+        maskImage.fillAmount = state ? 1f : 0f;
+        timeText.enabled = state;
     }
 }
