@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-public class WeaponBase : MonoBehaviour
+public abstract class WeaponBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    protected float attackSpeed;
+    public float AttackSpeed { get { return attackSpeed; } }
+    public virtual int CurrentMagazine { get; set; }
+    public virtual int MaxMagazine { get; }
+    public abstract int DoAttackHash { get; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void Use();
 }
