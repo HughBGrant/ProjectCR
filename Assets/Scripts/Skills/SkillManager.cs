@@ -13,6 +13,7 @@ public class SkillManager : MonoBehaviour
     [SerializeField]
     private List<SkillBinding> bindings;
     private Dictionary<string, SkillSlot> keyToSlot = new Dictionary<string, SkillSlot>();
+    private Dictionary<string, SkillInstance> keyToSkill = new Dictionary<string, SkillInstance>();
 
     private Animator animator;
 
@@ -22,16 +23,19 @@ public class SkillManager : MonoBehaviour
 
         foreach (SkillBinding binding in bindings)
         {
-            SkillInstance skill = new SkillInstance(binding.skillData);
-            binding.slot.Skill = skill;
-            keyToSlot[binding.key.Trim().ToLowerInvariant()] = binding.slot;
+            string key = binding.key.Trim().ToLowerInvariant();
+
+            keyToSlot[key] = binding.slot;
+            keyToSkill[key] = new SkillInstance(binding.skillData);
+            binding.slot.RefreshIcon(binding.skillData.icon);
         }
     }
     public bool TryUseSkill(string key)
     {
-        if (!keyToSlot.TryGetValue(key.ToLowerInvariant(), out SkillSlot slot)) { return false; }
+        key = key.ToLowerInvariant();
+        if (!keyToSlot.TryGetValue(key, out SkillSlot slot)) { return false; }
 
-        SkillInstance skill = slot.Skill;
+        if (!keyToSkill.TryGetValue(key, out SkillInstance skill)) { return false; }
 
         if (!skill.CanExecute()) {  return false; }
         
