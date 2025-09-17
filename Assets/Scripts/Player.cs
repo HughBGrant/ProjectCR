@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
 
     private Animator animator;
     private Rigidbody rb;
+    [SerializeField]
+    private WeaponBase currentWeapon;
 
     private Coroutine attackCo;
 
@@ -37,7 +39,6 @@ public class Player : MonoBehaviour
 
     private static readonly int IsWalkingHash = Animator.StringToHash("isWalking");
     private static readonly int IsSprintingHash = Animator.StringToHash("isSprinting");
-    private static readonly int DoAttackHash = Animator.StringToHash("doAttack");
     private static readonly int DoDefendHash = Animator.StringToHash("doDefend");
 
     void Awake()
@@ -86,7 +87,7 @@ public class Player : MonoBehaviour
 
             if (attackCo == null)
             {
-                attackCo = StartCoroutine(HandleContinuousAttack());
+                attackCo = StartCoroutine(HandleAttack());
             }
         }
         else if (context.canceled)
@@ -105,14 +106,15 @@ public class Player : MonoBehaviour
         if (!context.started) { return; }
         animator.SetTrigger(DoDefendHash);
     }
-    private IEnumerator HandleContinuousAttack()
+    private IEnumerator HandleAttack()
     {
         isAttacking = true;
         while (isAttackHeld)
         {
             if (Time.time > nextAttackTime)
             {
-                animator.SetTrigger(DoAttackHash);
+                animator.SetTrigger(currentWeapon.DoAttackHash);
+                currentWeapon.Use();
                 nextAttackTime = Time.time + 0.4f;/////////////
             }
             yield return null;

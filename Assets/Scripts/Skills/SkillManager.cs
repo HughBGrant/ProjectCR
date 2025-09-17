@@ -7,12 +7,12 @@ public class SkillManager : MonoBehaviour
     struct SkillBinding
     {
         public string key;
-        public SkillSlot slot;
+        public UI_SkillSlot slot;
         public SkillData skillData;
     }
     [SerializeField]
     private List<SkillBinding> bindings;
-    private Dictionary<string, SkillSlot> keyToSlot = new Dictionary<string, SkillSlot>();
+    private Dictionary<string, UI_SkillSlot> keyToSlot = new Dictionary<string, UI_SkillSlot>();
     private Dictionary<string, SkillInstance> keyToSkill = new Dictionary<string, SkillInstance>();
 
     private Animator animator;
@@ -33,7 +33,7 @@ public class SkillManager : MonoBehaviour
     public bool TryUseSkill(string key)
     {
         key = key.ToLowerInvariant();
-        if (!keyToSlot.TryGetValue(key, out SkillSlot slot)) { return false; }
+        if (!keyToSlot.TryGetValue(key, out UI_SkillSlot slot)) { return false; }
 
         if (!keyToSkill.TryGetValue(key, out SkillInstance skill)) { return false; }
 

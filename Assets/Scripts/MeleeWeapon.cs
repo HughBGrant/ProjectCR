@@ -6,19 +6,19 @@ public class MeleeWeapon : WeaponBase
     [SerializeField]
     private int damage;
     public int Damage { get { return damage; } }
-    [SerializeField]
-    private BoxCollider meleeRange;
+    private CapsuleCollider meleeRange;
 
     private Coroutine swingCo;
 
-    private static readonly int doSwingHash = Animator.StringToHash("doSwing");
+    private static readonly int doSwingHash = Animator.StringToHash("doAttack");
     public override int DoAttackHash { get { return doSwingHash; } }
 
     private static readonly WaitForSeconds wait01 = new WaitForSeconds(0.1f);
     private static readonly WaitForSeconds wait03 = new WaitForSeconds(0.3f);
+
     private void Awake()
     {
-        meleeRange = GetComponent<BoxCollider>();
+        meleeRange = GetComponent<CapsuleCollider>();
     }
     public override void Use()
     {
@@ -26,10 +26,10 @@ public class MeleeWeapon : WeaponBase
         {
             StopCoroutine(swingCo);
         }
-        swingCo = StartCoroutine(EnableMeleeHitbox());
+        swingCo = StartCoroutine(MeleeSwing());
     }
 
-    private IEnumerator EnableMeleeHitbox()
+    private IEnumerator MeleeSwing()
     {
         yield return wait01;
         meleeRange.enabled = true;

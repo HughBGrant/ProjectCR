@@ -6,8 +6,10 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField]
     private float currentHealth;
     //public float HP => hp;
-    private Coroutine hitCo;
     private Material material;
+    private Coroutine hitCo;
+    private float deathDestroyDelay = 2f;
+
     private void Awake()
     {
         material = GetComponent<MeshRenderer>().material;
@@ -15,19 +17,34 @@ public class Enemy : MonoBehaviour, IDamageable
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        Debug.Log($"체력 {damage} 감소. 현재 체력 {currentHealth}");
 
         if (hitCo != null)
         {
             StopCoroutine(hitCo);
         }
-        hitCo = StartCoroutine(ReactHit());
+        hitCo = StartCoroutine(ReactToHit());
 
     }
-    private IEnumerator ReactHit()
+    private void Die()
+    {
+        material.color = Color.gray;
+
+
+        Destroy(gameObject, deathDestroyDelay);
+    }
+    private IEnumerator ReactToHit()
     {
         material.color = Color.red;
         yield return new WaitForSeconds(0.5f);
-        material.color = Color.white;
-        
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            material.color = Color.white;
+        }
     }
 }
