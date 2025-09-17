@@ -26,10 +26,10 @@ public class MeleeWeapon : WeaponBase
         {
             StopCoroutine(swingCo);
         }
-        swingCo = StartCoroutine(SwingRoutine());
+        swingCo = StartCoroutine(EnableMeleeHitbox());
     }
 
-    private IEnumerator SwingRoutine()
+    private IEnumerator EnableMeleeHitbox()
     {
         yield return wait01;
         meleeRange.enabled = true;

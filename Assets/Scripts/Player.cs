@@ -86,7 +86,7 @@ public class Player : MonoBehaviour
 
             if (attackCo == null)
             {
-                attackCo = StartCoroutine(AttackRoutine());
+                attackCo = StartCoroutine(HandleContinuousAttack());
             }
         }
         else if (context.canceled)
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
         if (!context.started) { return; }
         animator.SetTrigger(DoDefendHash);
     }
-    private IEnumerator AttackRoutine()
+    private IEnumerator HandleContinuousAttack()
     {
         isAttacking = true;
         while (isAttackHeld)

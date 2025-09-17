@@ -20,10 +20,10 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             StopCoroutine(hitCo);
         }
-        hitCo = StartCoroutine(HitRoutine());
+        hitCo = StartCoroutine(ReactHit());
 
     }
-    private IEnumerator HitRoutine()
+    private IEnumerator ReactHit()
     {
         material.color = Color.red;
         yield return new WaitForSeconds(0.5f);

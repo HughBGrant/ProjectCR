@@ -28,9 +28,9 @@ public class SkillSlot : MonoBehaviour
         {
             StopCoroutine(cooldownCo);
         }
-        cooldownCo = StartCoroutine(CooldownRoutine(cooldownTime));
+        cooldownCo = StartCoroutine(AnimateCooldownUI(cooldownTime));
     }
-    private IEnumerator CooldownRoutine(float cooldownTime)
+    private IEnumerator AnimateCooldownUI(float cooldownTime)
     {
         SwitchCooldown(true);
 
