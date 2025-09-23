@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_Enemy : MonoBehaviour
+public class UI_HealthBar : MonoBehaviour
 {
     [SerializeField]
     private Image backHealthBar;
@@ -21,17 +21,23 @@ public class UI_Enemy : MonoBehaviour
 
         StartCoroutine(DecreaseHealth());
     }
-    IEnumerator DecreaseHealth()
+    private IEnumerator DecreaseHealth()
     {
         float duration = 0.5f;
-        while (backHealthBar.fillAmount > frontHealthBar.fillAmount)
+        float elapsed = 0f;
+
+        float startValue = backHealthBar.fillAmount;
+        float targetValue = frontHealthBar.fillAmount;
+
+        while (elapsed < duration)
         {
-            backHealthBar.fillAmount = Mathf.MoveTowards(
-                backHealthBar.fillAmount,
-                frontHealthBar.fillAmount,
-                (backHealthBar.fillAmount / duration) * Time.deltaTime
-            );
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            backHealthBar.fillAmount = Mathf.Lerp(startValue, targetValue, t);
+
             yield return null;
         }
+        backHealthBar.fillAmount = targetValue;
     }
 }

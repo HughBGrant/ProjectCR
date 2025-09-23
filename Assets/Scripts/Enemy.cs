@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour, IDamageable
     private Coroutine hitCo;
     private float deathDestroyDelay = 2f;
     [SerializeField]
-    private UI_Enemy healthBar;
+    private UI_HealthBar healthBar;
 
     private void Awake()
     {

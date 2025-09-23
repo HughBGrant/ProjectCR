@@ -32,6 +32,8 @@ public class Player : MonoBehaviour
     private Rigidbody rb;
     [SerializeField]
     private WeaponBase currentWeapon;
+    [SerializeField]
+    private GameObject damageText;
 
     private Coroutine attackCo;
 
@@ -46,6 +48,10 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         skillManager = GetComponent<SkillManager>();
+    }
+    private void Update()
+    {
+        Instantiate(damageText);
     }
     void FixedUpdate()
     {
