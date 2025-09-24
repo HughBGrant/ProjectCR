@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour, IDamageable
     private float deathDestroyDelay = 2f;
     [SerializeField]
     private UI_HealthBar healthBar;
+    [SerializeField]
+    private GameObject DamageUI;
 
     private void Awake()
     {
@@ -26,6 +28,12 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         CurrentHealth -= damage;
         healthBar.SetHealth(CurrentHealth / maxHealth);
+        GameObject damageObject = Instantiate(DamageUI);
+        damageObject.transform.SetParent(transform);
+        if (damageObject.TryGetComponent<UI_Damage>(out UI_Damage damageUI))
+        {
+            damageUI.SetDamage(damage);
+        }
 
         Debug.Log($"체력 {damage} 감소. 현재 체력 {CurrentHealth}");
 
