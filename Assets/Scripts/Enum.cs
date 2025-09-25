@@ -1,6 +1,15 @@
-public enum SkillType
+
+public enum Stat
 {
-    Attack,
-    Skill1,
-    End
+    MaxHealth,
+    MaxMana,
+    AttackPower,
+    MagicPower,
+    Defense,
+    MagicDefense,
+    CriticalChance,
+    CriticalDamage,
+    AttackSpeed,
+    MoveSpeed,
+    Count
 }

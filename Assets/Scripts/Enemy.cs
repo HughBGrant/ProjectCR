@@ -3,16 +3,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
-    //server, enum
-    public enum Stat
-    {
-        HP,
-        ATK,
-        DEF,
-        END
-    }
-    //Stat[] stat = new Stat[(int)Stat.ATK];
-    float[] stat = new float[(int)Stat.DEF];
+    float[] stat = new float[(int)Stat.Count];
     public void SetStat(Stat e, float value)
     {
         stat[(int)e] = value;
