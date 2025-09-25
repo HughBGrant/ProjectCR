@@ -3,6 +3,25 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
+    //server, enum
+    public enum Stat
+    {
+        HP,
+        ATK,
+        DEF,
+        END
+    }
+    //Stat[] stat = new Stat[(int)Stat.ATK];
+    float[] stat = new float[(int)Stat.DEF];
+    public void SetStat(Stat e, float value)
+    {
+        stat[(int)e] = value;
+    }
+    public float GetStat(Stat e)
+    {
+        return stat[(int)e];
+    }
+
     [SerializeField]
     private float maxHealth;
     private float currentHealth;
@@ -28,11 +47,10 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         CurrentHealth -= damage;
         healthBar.SetHealth(CurrentHealth / maxHealth);
-        GameObject damageObject = Instantiate(DamageUI);
-        damageObject.transform.SetParent(transform);
+        GameObject damageObject = Instantiate(DamageUI, transform);
         if (damageObject.TryGetComponent<UI_Damage>(out UI_Damage damageUI))
         {
-            damageUI.SetDamage(damage);
+            damageUI.Init(damage);
         }
 
         Debug.Log($"체력 {damage} 감소. 현재 체력 {CurrentHealth}");
