@@ -1,5 +1,5 @@
 
-public enum Stat
+public enum StatType
 {
     MaxHealth,
     MaxMana,

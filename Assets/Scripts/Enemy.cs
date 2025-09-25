@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
-    float[] stat = new float[(int)Stat.Count];
-    public void SetStat(Stat e, float value)
+    float[] stats = new float[(int)StatType.Count];
+    public void SetStat(StatType e, float value)
     {
-        stat[(int)e] = value;
+        stats[(int)e] = value;
     }
-    public float GetStat(Stat e)
+    public float GetStat(StatType e)
     {
-        return stat[(int)e];
+        return stats[(int)e];
     }
 
     [SerializeField]
