@@ -1,39 +1,41 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class DamageTextManager : MonoBehaviour
 {
     public static DamageTextManager Instance;
 
-    [SerializeField] private DamageText prefab;
-    [SerializeField] private int poolSize = 20;
-    [SerializeField] private Canvas canvas;
+    [SerializeField]
+    private UI_DamageText prefab;
+    [SerializeField]
+    private Canvas canvas;
+    [SerializeField]
+    private int poolSize = 20;
 
-    private Queue<DamageText> pool = new Queue<DamageText>();
-    private Camera mainCam;
+    private Queue<UI_DamageText> pool = new Queue<UI_DamageText>();
+    private Camera cam;
 
     private void Awake()
     {
         Instance = this;
-        mainCam = Camera.main;
+
+        cam = Camera.main;
 
         for (int i = 0; i < poolSize; i++)
         {
-            var obj = Instantiate(prefab, canvas.transform);
-            obj.Initialize(mainCam, ReturnToPool);
+            UI_DamageText obj = Instantiate(prefab, canvas.transform);
+            obj.Initialize(cam, ReturnToPool);
             obj.gameObject.SetActive(false);
             pool.Enqueue(obj);
         }
     }
-
-    public void SpawnText(string value, Vector3 worldPosition, Color color, float duration = 1f)
+    public void SpawnText(float damage, Vector3 worldPosition, float duration = 2f, Color? color = null)
     {
-        DamageText dt = pool.Count > 0 ? pool.Dequeue() : Instantiate(prefab, canvas.transform);
-        dt.Initialize(mainCam, ReturnToPool);
-        dt.Show(value, worldPosition, color, duration);
+        UI_DamageText dt = pool.Count > 0 ? pool.Dequeue() : Instantiate(prefab, canvas.transform);
+        dt.Initialize(cam, ReturnToPool);
+        dt.Show(damage, worldPosition, duration, color);
     }
-
-    private void ReturnToPool(DamageText dt)
+    private void ReturnToPool(UI_DamageText dt)
     {
         pool.Enqueue(dt);
     }

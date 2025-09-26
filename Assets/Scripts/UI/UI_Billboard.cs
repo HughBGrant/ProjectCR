@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Billboard : MonoBehaviour
+public class UI_Billboard : MonoBehaviour
 {
     private void LateUpdate()
     {
