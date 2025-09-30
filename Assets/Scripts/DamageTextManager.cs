@@ -8,7 +8,7 @@ public class DamageTextManager : MonoBehaviour
     [SerializeField]
     private UI_DamageText prefab;
     [SerializeField]
-    private Canvas canvas;
+    private Transform spawnPoint;
     [SerializeField]
     private int poolSize = 20;
 
@@ -23,17 +23,16 @@ public class DamageTextManager : MonoBehaviour
 
         for (int i = 0; i < poolSize; i++)
         {
-            UI_DamageText obj = Instantiate(prefab, canvas.transform);
-            obj.Initialize(cam, ReturnToPool);
-            obj.gameObject.SetActive(false);
-            pool.Enqueue(obj);
+            UI_DamageText text = Instantiate(prefab, spawnPoint);
+            text.Initialize(cam, ReturnToPool);
+            text.gameObject.SetActive(false);
+            pool.Enqueue(text);
         }
     }
     public void SpawnText(float damage, Vector3 worldPosition, float duration = 2f, Color? color = null)
     {
-        UI_DamageText dt = pool.Count > 0 ? pool.Dequeue() : Instantiate(prefab, canvas.transform);
-        dt.Initialize(cam, ReturnToPool);
-        dt.Show(damage, worldPosition, duration, color);
+        UI_DamageText text = pool.Count > 0 ? pool.Dequeue() : Instantiate(prefab, spawnPoint);
+        text.Show(damage, worldPosition, duration, color);
     }
     private void ReturnToPool(UI_DamageText dt)
     {

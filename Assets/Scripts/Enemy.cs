@@ -23,7 +23,9 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField]
     private UI_HealthBar healthBar;
     [SerializeField]
-    private GameObject DamageUI;
+    private GameObject DamageTextPrefab;
+    [SerializeField]
+    private Transform spawnPoint;
 
     private void Awake()
     {
@@ -38,12 +40,8 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         CurrentHealth -= damage;
         healthBar.SetHealth(CurrentHealth / maxHealth);
-        GameObject damageObject = Instantiate(DamageUI, transform);
-        if (damageObject.TryGetComponent<UI_DamageText>(out UI_DamageText damageUI))
-        {
-            damageUI.Show(damage, transform.position);
-            //DamageTextManager.Instance.SpawnText(damage.ToString(), transform.position, 1f);
-        }
+
+        DamageTextManager.Instance.SpawnText(damage, transform.position, 1f);
         Debug.Log($"체력 {damage} 감소. 현재 체력 {CurrentHealth}");
 
         if (hitCo != null)

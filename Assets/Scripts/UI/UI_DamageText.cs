@@ -1,20 +1,21 @@
+using System;
 using TMPro;
 using UnityEngine;
 
 public class UI_DamageText : MonoBehaviour
 {
-    private TextMeshPro text;
+    private TextMeshProUGUI text;
     private float lifetime;
 
     private Vector3 worldPosition;
     private Camera cam;
-    private System.Action<UI_DamageText> onReturnToPool;
+    private Action<UI_DamageText> onReturnToPool;
 
     private void Awake()
     {
-        text = GetComponent<TextMeshPro>();
+        text = GetComponent<TextMeshProUGUI>();
     }
-    public void Initialize(Camera cam, System.Action<UI_DamageText> returnCallback)
+    public void Initialize(Camera cam, Action<UI_DamageText> returnCallback)
     {
         this.cam = cam;
         onReturnToPool = returnCallback;
@@ -25,7 +26,7 @@ public class UI_DamageText : MonoBehaviour
         worldPosition = position + Vector3.up * 2f;
         lifetime = duration;
         text.color = color ?? Color.red;
-        //gameObject.SetActive(true);
+        gameObject.SetActive(true);
     }
     private void Update()
     {
@@ -36,18 +37,14 @@ public class UI_DamageText : MonoBehaviour
         if (lifetime <= 0f)
         {
             //1
-            //gameObject.SetActive(false);
-            //onReturnToPool?.Invoke(this);
-            //2
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            onReturnToPool?.Invoke(this);
 
             return;
         }
         text.alpha = Mathf.Clamp01(lifetime);
         //1
-        //Vector3 screenPos = mainCam.WorldToScreenPoint(worldPosition);
-        //transform.position = screenPos + new Vector3(0, lifetime * 30f, 0);
-        //2
-        transform.position += Vector3.up * 3f * Time.deltaTime;
+        Vector3 screenPos = cam.WorldToScreenPoint(worldPosition);
+        transform.position = screenPos + new Vector3(0, -lifetime * 100f, 0);
     }
 }
