@@ -1996,7 +1996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f6f61048a2c2064ab8ba43574494cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5364471995076809355, guid: 95de9a7a0be989748bcb748d7a97157f, type: 3}
+  textPrefab: {fileID: 5364471995076809355, guid: 95de9a7a0be989748bcb748d7a97157f, type: 3}
   spawnPoint: {fileID: 1931337204}
   poolSize: 20
 --- !u!1001 &1551644912

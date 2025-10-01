@@ -10,6 +10,7 @@ public class UI_DamageText : MonoBehaviour
     private Vector3 worldPosition;
     private Camera cam;
     private Action<UI_DamageText> onReturnToPool;
+    //private IObjectPool<Enemy> enemyPool;
 
     private void Awake()
     {
@@ -36,15 +37,17 @@ public class UI_DamageText : MonoBehaviour
 
         if (lifetime <= 0f)
         {
-            //1
             gameObject.SetActive(false);
             onReturnToPool?.Invoke(this);
 
             return;
         }
         text.alpha = Mathf.Clamp01(lifetime);
-        //1
         Vector3 screenPos = cam.WorldToScreenPoint(worldPosition);
         transform.position = screenPos + new Vector3(0, -lifetime * 100f, 0);
     }
+    //public void SetEnemyPool(IObjectPool<Enemy> pool)
+    //{
+    //    enemyPool = pool;
+    //}
 }
