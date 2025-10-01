@@ -4,47 +4,46 @@ using UnityEngine;
 
 public class UI_DamageText : MonoBehaviour
 {
-    private TextMeshProUGUI text;
-    private float lifetime;
-
-    private Vector3 worldPosition;
-    private Camera cam;
-    private Action<UI_DamageText> onReturnToPool;
+    private TextMeshProUGUI damageText;
+    private float remainingLifetime;
+    private Vector3 spawnWorldPosition;
+    private Camera mainCamera;
+    private Action<UI_DamageText> returnToPoolCallback;
     //private IObjectPool<Enemy> enemyPool;
 
     private void Awake()
     {
-        text = GetComponent<TextMeshProUGUI>();
+        damageText = GetComponent<TextMeshProUGUI>();
     }
-    public void Initialize(Camera cam, Action<UI_DamageText> returnCallback)
+    public void Setup(Camera cam, Action<UI_DamageText> returnCallback)
     {
-        this.cam = cam;
-        onReturnToPool = returnCallback;
+        this.mainCamera = cam;
+        returnToPoolCallback += returnCallback;
     }
-    public void Show(float damage, Vector3 position, float duration = 2f, Color? color = null)
+    public void Play(float damage, Vector3 position, float duration = 2f, Color? color = null)
     {
-        text.text = damage.ToString();
-        worldPosition = position + Vector3.up * 2f;
-        lifetime = duration;
-        text.color = color ?? Color.red;
+        damageText.text = damage.ToString();
+        spawnWorldPosition = position + Vector3.up * 2f;
+        remainingLifetime = duration;
+        damageText.color = color ?? Color.red;
         gameObject.SetActive(true);
     }
     private void Update()
     {
         if (!gameObject.activeSelf) { return; }
 
-        lifetime -= Time.deltaTime;
+        remainingLifetime -= Time.deltaTime;
 
-        if (lifetime <= 0f)
+        if (remainingLifetime <= 0f)
         {
             gameObject.SetActive(false);
-            onReturnToPool?.Invoke(this);
+            returnToPoolCallback?.Invoke(this);
 
             return;
         }
-        text.alpha = Mathf.Clamp01(lifetime);
-        Vector3 screenPos = cam.WorldToScreenPoint(worldPosition);
-        transform.position = screenPos + new Vector3(0, -lifetime * 100f, 0);
+        damageText.alpha = Mathf.Clamp01(remainingLifetime);
+        Vector3 screenPos = mainCamera.WorldToScreenPoint(spawnWorldPosition);
+        transform.position = screenPos + new Vector3(0, -remainingLifetime * 100f, 0);
     }
     //public void SetEnemyPool(IObjectPool<Enemy> pool)
     //{

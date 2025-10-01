@@ -1996,8 +1996,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f6f61048a2c2064ab8ba43574494cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textPrefab: {fileID: 5364471995076809355, guid: 95de9a7a0be989748bcb748d7a97157f, type: 3}
-  spawnPoint: {fileID: 1931337204}
+  damageTextPrefab: {fileID: 5364471995076809355, guid: 95de9a7a0be989748bcb748d7a97157f, type: 3}
+  parentTransform: {fileID: 1931337204}
   poolSize: 20
 --- !u!1001 &1551644912
 PrefabInstance:
@@ -2413,7 +2413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cd999d9f65b1c34e9468faebbba28f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackSpeed: 0
+  attackSpeed: 1
   damage: 10
 --- !u!1 &1772618641
 GameObject:

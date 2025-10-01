@@ -6,39 +6,39 @@ public class DamageTextManager : MonoBehaviour
     public static DamageTextManager Instance;
 
     [SerializeField]
-    private UI_DamageText textPrefab;
+    private UI_DamageText damageTextPrefab;
     [SerializeField]
-    private Transform spawnPoint;
+    private Transform parentTransform;
     [SerializeField]
     private int poolSize = 20;
     //1
-    private Queue<UI_DamageText> pool = new Queue<UI_DamageText>();
+    private Queue<UI_DamageText> damageTextPool = new Queue<UI_DamageText>();
     //2
     //private IObjectPool<UI_DamageText> pool;
-    private Camera cam;
+    private Camera mainCamera;
 
     private void Awake()
     {
         Instance = this;
         //pool = new ObjectPool<UI_DamageText>(CreateEnemy, OnGetEnemy, OnReleaseEnemy, OnDestroyEnemy, maxSize: 50);
-        cam = Camera.main;
+        mainCamera = Camera.main;
 
         for (int i = 0; i < poolSize; i++)
         {
-            UI_DamageText text = Instantiate(textPrefab, spawnPoint);
-            text.Initialize(cam, ReturnToPool);
+            UI_DamageText text = Instantiate(damageTextPrefab, parentTransform);
+            text.Setup(mainCamera, RecycleText);
             text.gameObject.SetActive(false);
-            pool.Enqueue(text);
+            damageTextPool.Enqueue(text);
         }
     }
-    public void SpawnText(float damage, Vector3 worldPosition, float duration = 2f, Color? color = null)
+    public void DisplayDamage(float damage, Vector3 worldPosition, float duration = 2f, Color? color = null)
     {
-        UI_DamageText text = pool.Count > 0 ? pool.Dequeue() : Instantiate(textPrefab, spawnPoint);
-        text.Show(damage, worldPosition, duration, color);
+        UI_DamageText text = damageTextPool.Count > 0 ? damageTextPool.Dequeue() : Instantiate(damageTextPrefab, parentTransform);
+        text.Play(damage, worldPosition, duration, color);
     }
-    private void ReturnToPool(UI_DamageText dt)
+    private void RecycleText(UI_DamageText dt)
     {
-        pool.Enqueue(dt);
+        damageTextPool.Enqueue(dt);
     }
 
     //void Spawn()
