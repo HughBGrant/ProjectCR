@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour, IDamageable
         CurrentHealth -= damage;
         healthBar.SetHealth(CurrentHealth / maxHealth);
 
-        DamageTextManager.Instance.DisplayDamage(damage, transform.position, 1f);
+        DamageTextManager.Instance.DisplayDamage(damage, 1f, transform.position);
         Debug.Log($"체력 {damage} 감소. 현재 체력 {CurrentHealth}");
 
         if (hitCo != null)

@@ -6,7 +6,6 @@ public class UI_DamageText : MonoBehaviour
 {
     private TextMeshProUGUI damageText;
     private float remainingLifetime;
-    //private Action<UI_DamageText> returnToPoolCallback;
     private IObjectPool<UI_DamageText> textPool;
 
     private void Awake()
