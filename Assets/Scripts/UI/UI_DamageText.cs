@@ -23,7 +23,7 @@ public class UI_DamageText : MonoBehaviour
     public void Play(float damage, Vector3 position, float duration = 2f, Color? color = null)
     {
         damageText.text = damage.ToString();
-        spawnWorldPosition = position + Vector3.up * 2f;
+        spawnWorldPosition = position + (Vector3.up * 2.5f);
         remainingLifetime = duration;
         damageText.color = color ?? Color.red;
         gameObject.SetActive(true);

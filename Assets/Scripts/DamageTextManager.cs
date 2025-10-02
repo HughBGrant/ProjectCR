@@ -23,13 +23,7 @@ public class DamageTextManager : MonoBehaviour
         //pool = new ObjectPool<UI_DamageText>(CreateEnemy, OnGetEnemy, OnReleaseEnemy, OnDestroyEnemy, maxSize: 50);
         mainCamera = Camera.main;
 
-        for (int i = 0; i < poolSize; i++)
-        {
-            UI_DamageText text = Instantiate(damageTextPrefab, parentTransform);
-            text.Setup(mainCamera, RecycleText);
-            text.gameObject.SetActive(false);
-            damageTextPool.Enqueue(text);
-        }
+        Prewarm();
     }
     public void DisplayDamage(float damage, Vector3 worldPosition, float duration = 2f, Color? color = null)
     {
@@ -40,7 +34,16 @@ public class DamageTextManager : MonoBehaviour
     {
         damageTextPool.Enqueue(dt);
     }
-
+    private void Prewarm()
+    {
+        for (int i = 0; i < poolSize; i++)
+        {
+            UI_DamageText text = Instantiate(damageTextPrefab, parentTransform);
+            text.Setup(mainCamera, RecycleText);
+            text.gameObject.SetActive(false);
+            damageTextPool.Enqueue(text);
+        }
+    }
     //void Spawn()
     //{
     //    Enemy enemy = enemyPool.Get();
@@ -69,5 +72,18 @@ public class DamageTextManager : MonoBehaviour
     //private void OnDestroyEnemy(UI_DamageText text)
     //{
     //    Destroy(text.gameObject);
+    //}
+
+    //private void Prewarm(int count)
+    //{
+    //    var tmp = new List<UI_DamageText>();
+    //    for (int i = 0; i < count; i++)
+    //    {
+    //        tmp.Add(pool.Get());
+    //    }
+    //    foreach (var t in tmp)
+    //    {
+    //        pool.Release(t);
+    //    }
     //}
 }
