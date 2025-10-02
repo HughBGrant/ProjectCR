@@ -18,13 +18,13 @@ public class DamageTextManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        textPool = new ObjectPool<UI_DamageText>(CreateText, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, defaultCapacity: 0, maxSize: 100);
-        //m_Pool = new ObjectPool<ParticleSystem>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, maxPoolSize);
+
+        textPool = new ObjectPool<UI_DamageText>(CreateText, OnGetFromPool, OnReleaseToPool, OnDestroyPooledObject, maxSize: 100);
         mainCamera = Camera.main;
     }
-    private void Start()
+    private void OnEnable()
     {
-        //Prewarm(poolSize);
+        Prewarm(poolSize);
     }
     public void DisplayDamage(float damage = 0, float duration = 2f, Vector3? worldPosition = null, Color? color = null)
     {

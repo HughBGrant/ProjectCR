@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 public class UI_DamageText : MonoBehaviour
 {
     private TextMeshProUGUI damageText;
-    private float remainingLifetime;
+    private float startLifetime = 1f;
     private IObjectPool<UI_DamageText> textPool;
 
     private void Awake()
@@ -16,7 +16,7 @@ public class UI_DamageText : MonoBehaviour
     {
         damageText.text = damage.ToString();
 
-        remainingLifetime = duration;
+        startLifetime = duration;
         damageText.color = color ?? Color.red;
         gameObject.SetActive(true);
     }
@@ -24,17 +24,23 @@ public class UI_DamageText : MonoBehaviour
     {
         if (!gameObject.activeSelf) { return; }
 
-        remainingLifetime -= Time.deltaTime;
+        Debug.Log(startLifetime);
+        startLifetime -= Time.deltaTime;
 
-        if (remainingLifetime <= 0f)
+        if (startLifetime <= 0f)
         {
+            Debug.Log("asdfsdfdsf");
             textPool.Release(this);
 
             return;
         }
-        damageText.alpha = Mathf.Clamp01(remainingLifetime);
+        damageText.alpha = Mathf.Clamp01(startLifetime);
 
         transform.position += new Vector3(0, Time.deltaTime * 100f, 0);
+    }
+    private void OnDisable()
+    {
+        if (!Application.isPlaying) textPool = null;
     }
     public void SetTextPool(IObjectPool<UI_DamageText> pool)
     {
