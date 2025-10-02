@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class DamageTextManager : MonoBehaviour
 {
@@ -11,79 +12,54 @@ public class DamageTextManager : MonoBehaviour
     private Transform parentTransform;
     [SerializeField]
     private int poolSize = 20;
-    //1
-    private Queue<UI_DamageText> damageTextPool = new Queue<UI_DamageText>();
-    //2
-    //private IObjectPool<UI_DamageText> pool;
     private Camera mainCamera;
+    //1
+    //private Queue<UI_DamageText> damageTextPool = new Queue<UI_DamageText>();
+    //2
+    private IObjectPool<UI_DamageText> textPool;
 
     private void Awake()
     {
         Instance = this;
-        //pool = new ObjectPool<UI_DamageText>(CreateEnemy, OnGetEnemy, OnReleaseEnemy, OnDestroyEnemy, maxSize: 50);
+        textPool = new ObjectPool<UI_DamageText>(CreateText, OnGetText, OnReleaseText, OnDestroyText, maxSize: poolSize);
         mainCamera = Camera.main;
 
-        Prewarm();
+        //Prewarm(poolSize);
     }
     public void DisplayDamage(float damage, Vector3 worldPosition, float duration = 2f, Color? color = null)
     {
-        UI_DamageText text = damageTextPool.Count > 0 ? damageTextPool.Dequeue() : Instantiate(damageTextPrefab, parentTransform);
-        text.Play(damage, worldPosition, duration, color);
+        UI_DamageText text = textPool.Get();
+        text.transform.position = mainCamera.WorldToScreenPoint(worldPosition + (Vector3.up * 2.5f));
+
+        text.Setup(damage, duration, color);
     }
-    private void RecycleText(UI_DamageText dt)
+    private void Prewarm(int count)
     {
-        damageTextPool.Enqueue(dt);
-    }
-    private void Prewarm()
-    {
-        for (int i = 0; i < poolSize; i++)
+        List<UI_DamageText> tmp = new List<UI_DamageText>();
+        for (int i = 0; i < count; i++)
         {
-            UI_DamageText text = Instantiate(damageTextPrefab, parentTransform);
-            text.Setup(mainCamera, RecycleText);
-            text.gameObject.SetActive(false);
-            damageTextPool.Enqueue(text);
+            UI_DamageText text = textPool.Get();
+            tmp.Add(text);
+            textPool.Release(text);
         }
     }
-    //void Spawn()
-    //{
-    //    Enemy enemy = enemyPool.Get();
-    //    Vector3 spawnPos = spawnPoss[Random.Range(0, spawnPoss.Length)];
-    //    enemy.transform.position = transform.position + spawnPos;
+    private UI_DamageText CreateText()
+    {
+        UI_DamageText text = Instantiate(damageTextPrefab, parentTransform).GetComponent<UI_DamageText>();
+        text.SetTextPool(textPool);
+        return text;
+    }
+    private void OnGetText(UI_DamageText text)
+    {
+        text.gameObject.SetActive(true);
+    }
+    private void OnReleaseText(UI_DamageText text)
+    {
+        text.gameObject.SetActive(false);
+    }
+    private void OnDestroyText(UI_DamageText text)
+    {
+        Destroy(text.gameObject);
+    }
 
-    //    enemy.Init(enemyDatas[level]);
-    //}
-    //private UI_DamageText CreateEnemy()
-    //{
-    //    UI_DamageText text = Instantiate(textPrefab, GameManager.Instance.EnemySpace.transform).GetComponent<Enemy>();
-    //    text.SetTextPool(textPool);
-    //    return text;
-    //Bullet bullet = Instantiate(bulletPrefab, GameManager.Instance.BulletSpace.transform).GetComponent<Bullet>();
-    //bullet.SetBulletPool(bulletPool);
-    //    return bullet;
-    //}
-    //private void OnGetEnemy(UI_DamageText text)
-    //{
-    //    text.gameObject.SetActive(true);
-    //}
-    //private void OnReleaseEnemy(UI_DamageText text)
-    //{
-    //    text.gameObject.SetActive(false);
-    //}
-    //private void OnDestroyEnemy(UI_DamageText text)
-    //{
-    //    Destroy(text.gameObject);
-    //}
-
-    //private void Prewarm(int count)
-    //{
-    //    var tmp = new List<UI_DamageText>();
-    //    for (int i = 0; i < count; i++)
-    //    {
-    //        tmp.Add(pool.Get());
-    //    }
-    //    foreach (var t in tmp)
-    //    {
-    //        pool.Release(t);
-    //    }
-    //}
 }
