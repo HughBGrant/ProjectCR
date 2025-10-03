@@ -47,24 +47,24 @@ public class DamageTextManager : MonoBehaviour
     }
     private UI_DamageText CreateText()
     {
-        Debug.Log("CreateText 호출됨!");
         UI_DamageText text = Instantiate(damageTextPrefab, parentTransform).GetComponent<UI_DamageText>();
-        text.SetTextPool(textPool);
+        //text.SetTextPool(textPool);
+        text.OnExpired += (expiredText) =>
+        {
+            textPool.Release(expiredText);
+        };
         return text;
     }
     private void OnGetFromPool(UI_DamageText text)
     {
-        Debug.Log("OnGetText 호출됨!");
         text.gameObject.SetActive(true);
     }
     private void OnReleaseToPool(UI_DamageText text)
     {
-        Debug.Log("OnReleaseText 호출됨!");
         text.gameObject.SetActive(false);
     }
     private void OnDestroyPooledObject(UI_DamageText text)
     {
-        Debug.Log("OnDestroyText 호출됨!");
         Destroy(text.gameObject);
     }
 
