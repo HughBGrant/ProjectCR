@@ -4,15 +4,6 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
-    private float[] stats = new float[(int)StatType.Count];
-    public float this[StatType e]
-    {
-        get => stats[(int)e];
-        set => stats[(int)e] = value;
-    }
-    private float currentHealth;
-    public float CurrentHealth { get { return currentHealth; } set { currentHealth = Mathf.Max(0, value); } }
-
     [SerializeField]
     private float maxHealth;
     [SerializeField]
@@ -23,13 +14,22 @@ public class Enemy : MonoBehaviour, IDamageable
     private Transform spawnPoint;
     [SerializeField]
     private MeshRenderer meshRenderer;
-    [SerializeField]
-    private Transform targetPoint;
+    public Transform targetPoint;
+
+    private float[] stats = new float[(int)StatType.Count];
+    public float this[StatType e] { get => stats[(int)e]; set => stats[(int)e] = value; }
+
+    private float currentHealth;
+    public float CurrentHealth { get { return currentHealth; } set { currentHealth = Mathf.Max(0, value); } }
 
     private bool isChasing;
+
     private Material material;
     private Coroutine hitCo;
     private NavMeshAgent navAgent;
+
+    private StateMachine stateMachine;
+    private EnemyState currentState;
 
     private const float deathDestroyDelay = 2f;
 
@@ -38,6 +38,7 @@ public class Enemy : MonoBehaviour, IDamageable
         //material = GetComponent<MeshRenderer>().material;
         material = meshRenderer.material;
         navAgent = GetComponent<NavMeshAgent>();
+        currentState = EnemyState.Idle;
     }
     private void Start()
     {
@@ -45,15 +46,34 @@ public class Enemy : MonoBehaviour, IDamageable
         CurrentHealth = maxHealth;
 
         StartCoroutine(StartChase());
+        //stateMachine = new StateMachine(new IdleState(this));
     }
     private void Update()
     {
+        stateMachine.UpdateState();
         //Target();
 
         if (navAgent.enabled)
         {
             navAgent.SetDestination(targetPoint.position);
             navAgent.isStopped = !isChasing;
+        }
+    }
+    public void Transition(EnemyState nextState)
+    {
+        currentState = nextState;
+
+        switch (currentState)
+        {
+            case EnemyState.Idle:
+                stateMachine.ChangeState(new IdleState(this));
+                break;
+            case EnemyState.Chase:
+                stateMachine.ChangeState(new ChaseState(this));
+                break;
+            case EnemyState.Attack:
+                //stateMachine.ChangeState(new AttackState(this));
+                break;
         }
     }
     public void TakeDamage(float damage)

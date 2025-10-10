@@ -13,3 +13,9 @@ public enum StatType
     MoveSpeed,
     Count
 }
+public enum EnemyState
+{
+    Idle,
+    Chase,
+    Attack
+}
