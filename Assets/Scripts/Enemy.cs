@@ -35,8 +35,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        material = GetComponent<MeshRenderer>().material;
-        //material = meshRenderer.material;
+        //material = GetComponent<MeshRenderer>().material;
+        material = meshRenderer.material;
         navAgent = GetComponent<NavMeshAgent>();
     }
     private void Start()
